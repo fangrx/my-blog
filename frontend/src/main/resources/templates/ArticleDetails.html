@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Window-target" content="_top">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- InstanceBeginEditable name="doctitle" -->
+    <title>[[${article.title}]] - [[${#params.value("website_logo_words")}]]</title>
+    <!-- InstanceEndEditable -->
+	<meta name="Author" th:content='${#params.value("author_name")}'>
+	<meta name="Copyright" th:content='${#params.value("author_name")}'>
+	<meta name="keywords" th:content='${#params.value("key_word")}' />
+	<meta name="description" th:content='${article.summary}'/>
+
+
+	<link rel="stylesheet" th:href="@{/ css/loading.css}">
+	<link rel="stylesheet" th:href="@{/css/scroll-bar.css}">
+	<link rel="stylesheet" th:href="@{/lib/layui-v2.3.0/css/layui.css}"  media="all">
+	<link rel="stylesheet" th:href="@{/css/common.css}">
+	<link rel="stylesheet" th:href="@{/css/suspension.css}">
+	<link rel="stylesheet" th:href="@{/css/animate.css}">
+	<link rel="stylesheet" th:href="@{/Eextend/iconfont/iconfont.css}">
+	<link rel="stylesheet" th:href="@{/css/comment.css}">
+	<link rel="stylesheet" th:href="@{/css/ArticleDetails.css}">
+	<link rel="stylesheet" th:href="@{/Eextend/highlight/styles/monokai-sublime.css}">
+
+	<script type="text/javascript" th:src="@{/Eextend/iconfont/iconfont.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+	<script th:src="@{/lib/layui-v2.3.0/layui.js}" charset="utf-8"></script>
+	<script type="text/javascript" th:src="@{/js/wow.min.js}"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+	<div th:replace="/common/fragment :: frontendHeadher"></div>
+<!--<section class="bg-overlay layui-hide">-->
+        <!--<div class="overlay"></div>-->
+        <!--<div class="layui-row text py-5">-->
+            <!--<p class="lead">Keep on going never give up.</p>-->
+            <!--<h1>-->
+                <!--我为你翻山越岭，却无心看风景-->
+            <!--</h1>-->
+            <!--<a href="#welcome" class="layui-btn layui-btn-normal layui-btn-radius layui-btn-lg">Let's Go</a>-->
+        <!--</div>-->
+    <!--</section>-->
+    <section class="container">
+				<!-- InstanceBeginEditable name="EditRegion1" -->
+				<input type="hidden" id="articleId" th:if="${article}" th:value="${article?.id}">
+		        <input type="hidden" id="pCateId" th:if="${cate}" th:value="${cate?.id}">
+				<div class="layui-container">
+					<div class="layui-row layui-col-space20">
+						<div class="layui-col-md2 layui-col-sm12" style="z-index: 99;">
+							<div class="card" th:if="${#params.value('acticle_mulu')} != 'false' ">
+								<h2 class="side-title">[[${cate.cnName}]]</h2>
+								<div  id="test2" style="overflow:hidden;max-height: 600px;padding-bottom: 20px">
+
+								</div>
+							</div>
+
+						</div>
+						<div class="layui-col-md8 layui-col-sm12" >
+							<div class="card details">
+								<h1 class="title text-center" id="code">[[${article.title}]]</h1>
+								<div class="details-info">
+									<a target="_blank" th:href="'/article/pages?cateId='+${article.cate.id}">
+										<i class="layui-icon layui-extend-fenlei"></i>
+										<span>[[${article.cate.cnName}]]</span>
+									</a>
+									<i class="layui-icon layui-icon-username"></i><span>[[${article.createBy.nickname}]]</span>
+									<i class="layui-icon layui-extend-riqi"></i><span>[[${article.updateDate}]]</span>
+									<i class="layui-icon layui-extend-wiappfangwenliang"></i>
+									<span id="click_count_text">[[${article.views}]]</span>
+									<a href="#am_comment">
+										<i class="layui-icon layui-icon-dialogue"></i>
+										<span id="comment_count_text">[[${commentCount}]]条</span>
+									</a>
+									<a href="#am_praise">
+										<i class="layui-icon layui-extend-dianzan"></i>
+										<span class="like_count_text">[[${article.approveCnt}]]</span>
+									</a>
+								</div>
+								<hr>
+								<div id="details-content" class="details-content" th:utext="${article.content}">
+
+								</div>
+
+								<div class="details-footer">
+									<div class="praise">
+										<span id="am_praise" class="target-fix">暗锚,解决锚点偏移</span>
+										<p>如喜欢，就留下一颗心吧❤️🌹🌹🌹</p>
+										<button id="btnLike" type="button" class="layui-btn">LIKE&nbsp;|&nbsp; <span class="like_count_text">[[${article.approveCnt}]]</span>
+										</button>
+									</div>
+									<hr>
+									<h3 th:utext='${#params.value("detail_notice")}'></h3>
+									<p >上一篇：<a th:if="${#maps.containsKey(beforarticle,'id')}"  th:href="'/article/'+${beforarticle.id }">[[${beforarticle?.title}]]</a>
+										<a th:if="not ${#maps.containsKey(beforarticle,'id')}"   href="javaScript:void(0)">无</a>
+									</p>
+									<p>下一篇：<a th:if="${#maps.containsKey(afterarticle,'id')}"  th:href="'/article/'+${afterarticle.id }">[[${afterarticle?.title}]]</a>
+										<a th:if="not ${#maps.containsKey(afterarticle,'id')}"  href="javaScript:void(0)">无</a>
+									</p>
+								</div>
+							</div>
+
+					<div class="card comment">
+						<span id="am_comment" class="target-fix">暗锚,解决锚点偏移</span>
+						<h2 class="side-title">文章评论</h2>
+
+						<div class="replycontainer" style="display: none;padding: 10px;">
+							<div class="layui-form blog-editor" lay-filter="formReply">
+								<textarea name="replay-input" id="replay-input" placeholder="请输入内容" class="layui-textarea layui-hide"></textarea>
+								<button type="button" class="layui-btn" id="replyBtn" shiro:user="" >提交</button>
+							</div>
+						</div>
+
+						<div class="layui-form blog-editor">
+							<div class="layui-form-item">
+								<textarea name="comment-input" id="comment-input" placeholder="请输入内容" class="layui-textarea layui-hide"></textarea>
+							</div>
+							<div class="layui-form-item">
+
+								<button th:if='${#params.value("all_comment_open") == "1" && article.commented  }'  type="button" class="layui-btn" id="commentBtn" shiro:user="" >提交留言</button>
+								<a  th:if='${#params.value("all_comment_open") == "1"  && article.commented }'   shiro:guest="" class="layui-btn layui-btn-danger"  id="beforeLogin"><i class="fa fa-qq"></i> 请先登录</a>
+
+								<blockquote th:if='${#params.value("all_comment_open") == "0" || ! article.commented }'  class="layui-elem-quote" th:utext="${#params.value('message_panel_words')}">
+
+								</blockquote>
+							</div>
+
+						</div>
+						<!-- 评论列表 -->
+						<ul class="blog-comment">
+							<li th:each="item:${comments}">
+								<div class="comment-parent">
+									<a href="javaScript:void(0)"><img th:src="${item.img}" alt="" /></a>
+									<div class="info">
+										<span class="username"><a href="javaScript:void(0)">[[${item.replyName}]]</a></span>
+										<!--<span class="layui-badge layui-bg-orange">博主</span>-->
+									</div>
+									<div class="content comment-text" th:utext="${item.content}">
+
+									</div>
+									<p class="info info-footer">
+										<span class="aux-word">
+											<i class="layui-icon layui-icon-log"></i>[[${item.time}]]
+										</span>
+										<span class="aux-word">
+											<i class="layui-icon layui-icon-location"></i>[[${item.address}]]
+										</span>
+										<span class="aux-word">
+											<i class="layui-icon layui-extend-liulanqi"></i>[[${item.browse}]]
+										</span>
+										<a shiro:user="" class="btn-reply" href="javascript:void (0);" th:attr="data-id=${item.id},data-name=${item.replyName},data-levelId=${item.id}" >回复</a>
+									</p>
+
+								</div>
+								<hr />
+								<div class="comment-child" th:each="it:${item.replyBody}">
+									<a href="javaScript:void(0)"><img th:src="${it.img}" alt="" /></a>
+									<div class="info">
+										<span class="username"><a href="javaScript:void(0)">[[${it.replyName}]]</a></span>
+										<span>回复<a href="javaScript:void(0)" class="to-username">@[[${it.beReplyName}]]</a>：</span>
+										<span class="comment-text" th:utext="${it.content}"></span>
+									</div>
+									<p class="info">
+										<span class="aux-word">
+											<i class="layui-icon layui-icon-log"></i>[[${it.time}]]
+										</span>
+										<span class="aux-word">
+											<i class="layui-icon layui-icon-location"></i>[[${it.address}]]
+										</span>
+										<span class="aux-word">
+											<i class="layui-icon layui-extend-liulanqi"></i>[[${it.browse}]]
+										</span>
+										<a  shiro:user="" class="btn-reply" href="javascript:void (0);" th:attr="data-id=${it.id},data-name=${it.replyName},data-levelId=${item.id}" >回复</a>
+									</p>
+
+								</div>
+							</li>
+						</ul>
+						<!--<div id="page"></div>-->
+					</div>
+						</div>
+					</div>
+				</div>
+
+		<!-- InstanceEndEditable -->
+    </section>
+	<div th:replace="/common/fragment :: frontendFooter"></div>
+	<div th:replace="/common/fragment :: frontendLongin"></div>
+    <!-- 打字机特效js-->
+	<script type="text/javascript" th:src="@{/js/typewriter.js}"></script>
+	<script type="text/javascript" th:src="@{/js/hc-sticky.js}"></script>
+	<script th:src="@{/js/img2blob.js}" type="text/javascript"></script>
+	<script type="text/javascript" th:src="@{/js/ArticleDetails.js}"></script>
+	<script type="text/javascript" th:src="@{/Eextend/highlight/highlight.pack.js}"></script>
+
+
+	<!-- 这个JS展示公告层用的，无关紧要可以删掉。 -->
+	<!--<script src="/js/TempShowTip.js"></script>-->
+	<script th:inline="javascript">
+        $(function(){
+            //点赞
+            $("#btnLike").click(function(){
+                var uid = "guest";
+                if (getCookie("article::" + [[${article.id}]] + "::" + uid) != null) {
+                    layer.msg("近期您已经点过赞，感谢您的支持！");
+                } else {
+                    $.post("/article/approve", {articleId: [[${article.id}]]}, function (json) {
+                        if (json.code === 200) {
+                            setCookie("article::" + [[${article.id}]]+ "::" + uid, "noteblog system");
+                            //  that.approve++;
+                            $('.like_count_text').html('[[${article.approveCnt+1}]]');
+                            layer.msg("谢谢您的支持！");
+                        }else{
+                            layer.msg(json.msg);
+						}
+                    })
+                }
+            });
+            // $("#details-content img").img2blob({
+            //     watermark:window.location.href ,
+            //     fontStyle: 'Microsoft YaHei,Arial',
+            //     fontSize: '12', // px
+            //     fontColor: '#ccc' // default 'black'
+            //     //fontX: 50, // The x coordinate where to start painting the text
+            //    // fontY: 20 // The y coordinate where to start painting the text
+            // });
+
+        });
+
+
+        var codeLayer = [[${#params.value("code_util_layer")}]]
+
+	</script>
+	<script>
+        $(document).ready(function($) {
+            $('.layui-col-md2').hcSticky({
+                stickTo: '.layui-col-md8',
+                top:'100'
+            });
+        });
+        $("#test2").hover(function(){
+            $("#test2").css("overflow-y","auto")
+        },function(){
+            $("#test2").css("overflow","hidden")
+        })
+	</script>
+
+	<script src="/js/Template.js"></script>
+</body>
+
+<!-- InstanceEnd --></html>

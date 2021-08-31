@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+</head>
+<body>
+    <div class="layui-form dolphin-compile">
+    <form th:action="@{/system/errorLog/save}">
+        <input type="hidden" name="id" th:if="${errorLog}" th:value="${errorLog.id}">
+        <div class="layui-form-item">
+            <label class="layui-form-label">异常内容</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="content" placeholder="请输入异常内容" th:value="${errorLog?.content}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">日志等级</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="level" placeholder="请输入日志等级" th:value="${errorLog?.level}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">线程名称</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="threadName" placeholder="请输入线程名称" th:value="${errorLog?.threadName}">
+            </div>
+        </div>
+        <div class="layui-form-item dolphin-finally">
+            <button class="layui-btn ajax-submit"><i class="fa fa-check-circle"></i> 保存</button>
+            <button class="layui-btn btn-secondary close-popup"><i class="fa fa-times-circle"></i> 关闭</button>
+        </div>
+    </form>
+</div>
+<script th:replace="/common/template :: script"></script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+    <style>
+        .readmailinfo {
+            background: #eff5fb;
+            border-top: 1px solid #fff;
+            border-bottom: 1px solid #c3c3c3;
+            margin-left: 10px;
+        }
+        .addrtitle {
+            color: #798699;
+            margin-right: 5px;
+        }
+        .mailBg{
+            background-color: #009688;
+            color: #fff;
+
+        }
+    </style>
+</head>
+<body>
+<div id="mailTitle" style='font: bold 14px "lucida Grande",Verdana,"Microsoft YaHei";padding-left: 14px;margin-bottom: 10px;'></div>
+<div class="readmailinfo">
+    <table border="0" cellpadding="0" cellspacing="0">
+        <tbody id="iframe">
+
+        </tbody>
+    </table>
+</div>
+<div id="file" style="margin-left: 10px; border-bottom: 1px solid #c3c3c3;">
+
+
+</div>
+<div id="content" style="margin-left: 10px;overflow: auto" >
+
+</div>
+<script th:replace="/common/template :: script"></script>
+<script th:inline="javascript">
+    var $='';
+    var mail = [[${mail}]];
+    layui.use(['laydate','carousel','element','timeago','flow'], function() {
+        $ = layui.$;
+        var html = "";
+        if (mail.fromUser) {
+
+            html += "<tr><td style='padding-left: 14px;'><span class='addrtitle'>发件人:</span><span style='color: #5fa207;'>"+mail.fromUser+"</span></td></tr>";
+        }
+        if (mail.toUser) {
+            html += "<tr><td style='padding-left: 14px;'><span class='addrtitle'>收件人:</span><span style='color: #000;'>"+mail.toUser+"</span></td></tr>";
+        }
+        if (mail.ccUser) {
+            html += "<tr><td style='padding-left: 14px;'><span class='addrtitle'>抄送人:</span><span style='color: #798699;'>"+mail.ccUser+"</span></td></tr>";
+
+        }
+        if (mail.ssUser) {
+            html += "<tr><td style='padding-left: 14px;'><span class='addrtitle'>密送人:</span><span style='color: #798699;'>"+mail.ssUser+"</span></td></tr>";
+
+        }
+
+        if (mail.sendTime) {
+            html += "<tr><td style='padding-left: 14px;'><span class='addrtitle'>时间:</span><span style='color: #798699;'>"+mail.sendTime+"</span></td></tr>";
+        }else{
+            html += "<tr><td style='padding-left: 14px;'><span class='addrtitle'>时间:</span><span style='color: #798699;'>"+mail.receiveTime+"</span></td></tr>";
+
+        }
+        if (mail.mailSize) {
+
+            html += "<tr><td style='padding-left: 14px;'><span class='addrtitle'>大小:</span><span style='color: #798699;'>"+mail.mailSize+"</span></td></tr>";
+
+        }
+
+
+            var attaIds = eval(mail.attaIds);
+
+
+        if(attaIds&&attaIds.length>0){
+            for(var i = 0;i<attaIds.length;i++){
+                var attaId ;
+                try {
+                    attaId =JSON.parse(attaIds[i]);
+                }catch (e) {
+                    attaId = attaIds[i];
+                }
+                $('#file').html("<a href='"+attaId.url+"' ><i class='icon fa fa-file-o'style='margin-right: 5px'></i>"+attaId.name+"</a>");
+            }
+        }
+
+        $('#iframe').html(html);
+        $('#content').html(mail.mailContHtml);
+        $('#mailTitle').html(mail.title);
+    });
+
+
+</script>
+</body>
+</html>

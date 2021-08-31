@@ -1,0 +1,213 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+      <title>[[${#params.value("website_logo_words")}]]官网</title>
+      <meta charset="utf-8">
+      <meta name="renderer" content="webkit">
+      <meta http-equiv="Window-target" content="_top">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+      <!-- InstanceBeginEditable name="doctitle" -->
+      <!-- InstanceEndEditable -->
+      <meta name="Author" th:contect='${#params.value("author_name")}'>
+      <meta name="Copyright" th:contect='${#params.value("author_name")}'>
+      <meta name="keywords" th:contect='${#params.value("key_word")}' />
+      <meta name="description" th:contect='${#params.value("website_info_title")}'/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/delphis.css" rel="stylesheet">
+
+
+
+	<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+  </head>
+  <body>
+    <!-- 底部导航栏 -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+		  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-6" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+            <a  href="/frontend/dolphi">
+                    <img style="height: 50px;" src="/images/logo.png" oncontextmenu="return false;" ondragstart="return false;" />
+            </a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/frontend/dolphi">首页</a></li>
+            <li><a href="javascript:alert('抱歉！该功能还未开放！')" target="_blank">在线文档</a></li>
+            <li><a href="https://gitee.com/linping0124/lazy_bk" target="_blank">开源地址</a></li>
+              <li><a href="http://www.nonelonely.com" target="_blank">博主博客</a></li>
+            <li><a href="javascript:alert('抱歉！该功能还未开放！')" target="_blank">商业合作</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="over"></div>
+    <!-- 产品封面 -->
+    <div class="jumbotron">
+      <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <img class="page-display" src="/images/cover5.png">
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <div class="introduce">
+                    <h1>小海豚博客</h1>
+                    <p>基于SpringBoot2.0 + Spring Data Jpa + Thymeleaf + Layui的个人博客</p>
+                    <p>
+                        <a href="https://gitee.com/linping0124/lazy_bk" class="download" target="_blank">
+                        <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                        立即下载
+                        </a>
+                    <p>
+                    <p class="versions">当前版本：2020/2/29 <a href="https://gitee.com/linping0124/lazy_bk" target="_blank">更新日志</a></p>
+                    <p class="view-icon">
+                        <img src="https://img.shields.io/badge/License-Apache--2.0-blue.svg">
+                        <a href='https://gitee.com/linping0124/lazy_bk/stargazers'><img src='https://gitee.com/linping0124/lazy_bk/badge/star.svg?theme=dark' alt='star'></img></a>
+                        <a href='https://gitee.com/linping0124/lazy_bk/members'><img src='https://gitee.com/linping0124/lazy_bk/badge/fork.svg?theme=dark' alt='fork'></img></a>                    </p>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="overlay"></div>
+    <!-- 介绍信息 -->
+    <div class="container">
+        <!-- 系统功能 -->
+        <div class="system-modules">
+            <h2 class="page-header">系统功能</h2>
+            <div class="row modules-body">
+                <div class="col-xs-12 col-md-3 modules-item">
+                    <div class="modules-card modules-card-yellow">
+                        <div class="modules-card-number"><span class="code">1</span></div>
+                        <div class="modules-card-interval"></div>
+                        <div class="modules-card-body">
+                            <h3 class="card-title">博客模块</h3>
+                            <p class="card-content">
+                                1.使用Layui作为前端样式，打造响应式，漂亮，简约的博客模板</br>
+                                2.使用EhCache作为缓存系统，常用的数据不用再次加载</br>
+                                3.使用JPA作为数据库框架，打造只要创建数据库，执行Jar包就可部署好网站</br>
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-3 modules-item">
+                    <div class="modules-card">
+                        <div class="modules-card-number"><span class="code">2</span></div>
+                        <div class="modules-card-interval"></div>
+                        <div class="modules-card-body">
+                            <h3 class="card-title">权限管理</h3>
+                            <p class="card-content">
+                                使用Shiro权限框架，目前采用基于路径的权限，内置了扫描机制并加入资源库，管理员可以赋予角色，也可以把菜单资源设置为菜单。
+                                并且内置了第三方QQ登录。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-md-3 modules-item">
+                    <div class="modules-card modules-card-red">
+                        <div class="modules-card-number"><span class="code">3</span></div>
+                        <div class="modules-card-interval"></div>
+                        <div class="modules-card-body">
+                            <h3 class="card-title">代码生成</h3>
+                            <p class="card-content">
+                                代码生成功能可以帮助开发者快速开发项目，减少不必要的重复操作，让开发中花更多时间去注重业务，
+                                让你二次开发更简单。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-3 modules-item">
+                    <div class="modules-card modules-card-green">
+                        <div class="modules-card-number"><span class="code">4</span></div>
+                        <div class="modules-card-interval"></div>
+                        <div class="modules-card-body">
+                            <h3 class="card-title">邮件系统</h3>
+                            <p class="card-content">
+                               内置了邮件系统，可以设置留言时是否发送给自己或者被回复人，可以发送附件，HTML，普通的各种邮件。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 技术栈 -->
+        <div class="technology-stack">
+            <h2 class="page-header">技术栈</h2>
+            <div class="row technology-body">
+                <div class="col-xs-6 col-md-3 technology-item">
+                    <img class="technology-icon" src="/images/spring-boot.jpeg">
+                    <p class="technology-title">Spring Boot</p>
+                </div>
+                <div class="col-xs-6 col-md-3 technology-item">
+                    <img class="technology-icon" src="/images/spring-data-jpa.png">
+                    <p class="technology-title">Spring Data Jpa</p>
+                </div>
+                <div class="col-xs-6 col-md-3 technology-item">
+                    <img class="technology-icon" src="/images/thymeleaf.png">
+                    <p class="technology-title">Thymeleaf</p>
+                </div>
+                <div class="col-xs-6 col-md-3 technology-item">
+                    <img class="technology-icon" src="/images/apache-shiro.png">
+                    <p class="technology-title">Apache Shiro</p>
+                </div>
+                <div class="col-xs-6 col-md-3 technology-item">
+                    <img class="technology-icon" src="/images/ehcache.png">
+                    <p class="technology-title">EhCache</p>
+                </div>
+                <div class="col-xs-6 col-md-3 technology-item">
+                    <img class="technology-icon" src="/images/layui.png">
+                    <p class="technology-title">Layui</p>
+                </div>
+                <div class="col-xs-6 col-md-3 technology-item">
+                    <img class="technology-icon" src="/images/jquery.png">
+                    <p class="technology-title">Jquery</p>
+                </div>
+                <div class="col-xs-6 col-md-3 technology-item">
+                    <img class="technology-icon" src="/images/font-awesome.png">
+                    <p class="technology-title">Font Awesome</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页尾 -->
+        <hr>
+        <div th:replace="/common/fragment :: frontendFooter"></div>
+    </div>
+
+    <!-- 广告位 -->
+    <!-- <a data-type="13" data-tmpl="350x100" data-tmplid="212" data-rd="2" data-style="2" data-border="1" href="#"></a>
+    <script type="text/javascript">
+        (function(win,doc){
+            var s = doc.createElement("script"), h = doc.getElementsByTagName("head")[0];
+            if (!win.alimamatk_show) {
+                s.charset = "gbk";
+                s.async = true;
+                s.src = "https://alimama.alicdn.com/tkapi.js";
+                h.insertBefore(s, h.firstChild);
+            };
+            var o = {
+                pid: "mm_323800013_658700382_109223650091",/*推广单元ID，用于区分不同的推广渠道*/
+                appkey: "",/*通过TOP平台申请的appkey，设置后引导成交会关联appkey*/
+                unid: "",/*自定义统计字段*/
+                type: "click" /* click 组件的入口标志 （使用click组件必设）*/
+            };
+            win.alimamatk_onload = win.alimamatk_onload || [];
+            win.alimamatk_onload.push(o);
+        })(window,document);
+    </script> -->
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+    <script src="/js/delphis.js"></script>
+    <script src="/js/Template.js"></script>
+  </body>
+</html>

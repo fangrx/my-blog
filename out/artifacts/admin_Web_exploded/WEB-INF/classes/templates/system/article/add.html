@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+
+    <link rel="stylesheet" th:href="@{/lib/form-selects/form-selects.v4.css}"  media="all">
+    <link rel="stylesheet" type="text/css" href="/lib/editormd/css/editormd.min.css">
+</head>
+<body>
+    <div class="layui-form dolphin-compile">
+    <div>
+        <input type="hidden" name="id" th:if="${article}" th:value="${article?.id}">
+        <input type="hidden" name="views" th:if="${article}" th:value="${article?.views}">
+        <div class="layui-form-item layui-col-sm8">
+        <label class="layui-form-label">标题</label>
+        <div class="layui-input-block">
+            <input class="layui-input" type="text" name="title" placeholder="请输入标题" th:value="${article?.title}">
+        </div>
+       </div>
+        <div class="layui-form-item layui-col-sm8">
+            <label class="layui-form-label">系列名称</label>
+            <div class="layui-input-block">
+                <input class="layui-input" type="text" name="xtitle" placeholder="请输入名称" th:value="${article?.xtitle}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">自定义链接</label>
+            <div class="layui-input-block">
+                <input type="checkbox" lay-skin="switch"
+                       th:checked="${article?.urlSequence ne null && !#strings.isEmpty(article?.urlSequence)}"
+                       lay-filter="customUrl" lay-text="自定义|自动生成">
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-sm8"
+             th:style="'display:' + @{(${article.urlSequence} ? 'none' : 'inline-block')} + ''"
+             id="urlSequence">
+            <label class="layui-form-label">文章短网址</label>
+            <div class="layui-input-block">
+                <input type="text" name="urlSequence" placeholder="输入文章短网址，示例：/article-example-url"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-sm8">
+            <label class="layui-form-label">分类</label>
+            <div class="layui-input-inline">
+                <input class="layui-input select-tree" th:attr="data-url=@{/system/cate/list}, data-value=${article?.cate.id},data-name='cate.id'" type="text" name="cate.id"  placeholder="选择类别" th:value="${article?.cate.cnName}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">封面</label>
+            <div class="layui-upload-drag" id="coverImg">
+                <i th:if="${article.cover eq null || #strings.isEmpty(article.cover)}"
+                   class="layui-icon"></i>
+                <p th:if="${article.cover eq null || #strings.isEmpty(article.cover)}">
+                    点击上传博文封面，或将封面拖拽到此处</p>
+                <p th:if="${article.cover ne null && !#strings.isEmpty(article.cover)}"><img
+                        th:src="${article.cover}"
+                        style="width: 144px;height: 90px;"></p>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-sm8">
+            <label class="layui-form-label">封面地址</label>
+            <div class="layui-input-block  ">
+                <input type="text" name="cover" id="cover" th:value="${article.cover}"
+                       autocomplete="off" class="layui-input" placeholder="手动输入封面地址">
+            </div>
+        </div>
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">内容</label>-->
+<!--            <div class="layui-input-inline">-->
+<!--                <input class="layui-input" type="text" name="content" placeholder="请输入备注" th:value="${article?.content}">-->
+<!--            </div>-->
+<!--        </div>-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">编辑器类型</label>
+            <div class="layui-input-block">
+                <input type="radio" name="editor" value="markdown" title="markdown编辑器"
+                       th:checked="${!#strings.isEmpty(article.mdContent) && article.mdContent ne null }"
+                       lay-filter="editor">
+                <input type="radio" name="editor" value="html" title="富文本编辑器"
+                       th:checked="${#strings.isEmpty(article.mdContent) ||  article.mdContent eq null}"
+                       lay-filter="editor">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">内容</label>
+            <div class="layui-input-block" id="content-editor"  style="max-width: 1366px;">
+                <textarea id="content" name="content" th:text="${article?.content}" style="display: none;"></textarea>
+            </div>
+        </div>
+        <textarea id="editormd-markdown-doc" name="editormd-markdown-doc"
+                  style="display:none;"></textarea>
+        <textarea id="editormd-html-code" name="editormd-html-code" style="display:none;"></textarea>
+        <div class="layui-form-item">
+            <label class="layui-form-label">开启摘要</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="autoSummary" lay-skin="switch"
+                       lay-filter="summary" lay-text="手动撰写|自动生成">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text" id="article-summary" style="display: none;">
+            <label class="layui-form-label">文章摘要</label>
+            <div class="layui-input-block">
+                            <textarea name="summary" placeholder="如果不填，则取文章内容的开头小部分（不包含图片以及文字格式）" class="layui-textarea"
+                                      style="resize: none;"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-sm8">
+            <label class="layui-form-label">标签</label>
+            <div class="layui-input-block">
+                <select name="tagNames"
+                        xm-select="tags"
+                        xm-select-max="4"
+                        xm-select-search=""
+                        xm-select-create=""
+                        xm-select-search-type="dl">
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">评论功能</label>
+                <div class="layui-inline">
+                    <input type="checkbox" name="commented" value="true" lay-skin="switch"
+                           lay-text="开启|关闭"
+                           th:checked="${article.commented  } == false ? 'false':'true'"
+                           title="评论">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">打赏功能</label>
+                <div class="layui-inline">
+                    <input type="checkbox" name="appreciable" value="true" lay-skin="switch"
+                           th:checked="${article.appreciable}"
+                           lay-text="开启|关闭" title="打赏">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">是否置顶</label>
+                <div class="layui-inline">
+                    <input type="checkbox" name="top" value="true" lay-skin="switch"
+                           th:checked="${article.top}"
+
+                           lay-text="开启|关闭" title="置顶">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item dolphin-finally">
+            <button class="layui-btn" lay-submit lay-filter="postSubmit"><i class="fa fa-check-circle"></i> 保存</button>
+            <button class="layui-btn btn-secondary close-popup"><i class="fa fa-times-circle"></i> 关闭</button>
+        </div>
+    </div>
+</div>
+    <script th:inline="javascript">
+        var isMd = [[${article.mdContent ne null && !#strings.isEmpty(article.mdContent)}]];
+        var mdContents = isMd ? [[${article.mdContent}]] : '';
+        var articleId = [[${article.id}]]
+    </script>
+    <script th:replace="/common/template :: script"></script>
+    <script type="text/javascript" th:src="@{/js/plugins/jquery-2.2.4.min.js}"></script>
+    <script th:src="@{/js/system/article.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/lib/zTree_v3/js/jquery.ztree.core.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dolphinTree.js}"></script>
+    <script th:inline="javascript" >
+        var type = [[${menu?.type}]];
+        layui.use(['form'], function () {
+            window.form = layui.form;
+
+            // 初始化排序下拉选项
+            var pid = $(".select-tree").data('value');
+            if (pid !== undefined){
+                sortRender({id: pid});
+            }
+            if (type!= '1'){
+                $("#resources").show();
+            } else {
+                $("#resources").hide();
+            }
+            form.on('select(type)', function(data){
+                if (data.value != '1'){
+                    $("#resources").show();
+                } else {
+                    $("#resources").hide();
+                }
+            })
+        });
+
+        // 初始化下拉树
+        $.fn.selectTree({
+           rootTree: '顶级菜单',
+            // 选中后事件
+            onSelected: sortRender
+        });
+
+        // 更新渲染排序下拉选项
+        function sortRender(treeNode) {
+            var pid = treeNode.id;
+            var sort = $(".select-sort");
+            var id = sort.data('id') ? sort.data('id') : 0;
+            var url = sort.data('url') + "/" + pid + "/" + id;
+            $.get(url, function (result) {
+                var options = '';
+                var sortNum = Object.keys(result).length;
+                if(pid === $(".select-tree").data('value') && sort.data('sort')){
+                    sortNum = sort.data('sort') - 1;
+                }
+                result[0] = "首位";
+                for(var key in result){
+                    var selected = sortNum == key ? "selected=''" : "";
+                    options += "<option value='"+ key +"' " + selected + ">"+ result[key] +"</option>";
+                }
+                sort.html(options);
+                form.render('select');
+            });
+        }
+
+    </script>
+</body>
+</html>

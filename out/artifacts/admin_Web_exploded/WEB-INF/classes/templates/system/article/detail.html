@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+
+</head>
+<body>
+    <div class="dolphin-detail-page">
+        <div class="dolphin-detail-title">基本信息</div>
+        <table class="layui-table dolphin-detail-table">
+            <colgroup>
+                <col width="100px"><col>
+                <col width="100px"><col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <th>主键ID</th>
+                    <td th:text="${article.id}"></td>
+                    <th>标题</th>
+                    <td th:utext="${article.title}"></td>
+                </tr>
+                <tr>
+                    <th>内容</th>
+                    <td th:utext="${article.content}"></td>
+                    <th>类别</th>
+                    <td th:text="${article.cate.name}"></td>
+                </tr>
+                <tr>
+                    <th>浏览次数</th>
+                    <td th:text="${article.views}"></td>
+                    <th>点赞次数</th>
+                    <td th:text="${article.approveCnt}"></td>
+                </tr>
+                <tr>
+                    <th>是否可以评论</th>
+                    <td th:text="${article.commented}"></td>
+                    <th>是否可以点赞</th>
+                    <td th:text="${article.appreciable}"></td>
+                </tr>
+                <tr>
+                    <th>自定义链接</th>
+                    <td th:text="${article.urlSequence}"></td>
+                    <th>置顶</th>
+                    <td th:text="${article.top}"></td>
+                </tr>
+                <tr>
+                    <th>创建者</th>
+                    <td th:text="${article.createBy?.nickname}"></td>
+                    <th>更新者</th>
+                    <td th:text="${article.updateBy?.nickname}"></td>
+                </tr>
+                <tr>
+                    <th>创建时间</th>
+                    <td th:text="${#dates.format(article.createDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <th>更新时间</th>
+                    <td th:text="${#dates.format(article.updateDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+<script th:replace="/common/template :: script"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<!--<script th:inline="javascript">-->
+    <!--$.get("https://api.ooopn.com/collect-check/baidu/api.php?url=www.nonelonely.com/article/'"+[[${article.id}]],function (result) {-->
+        <!--$('#baidu').text(result.msg);-->
+    <!--});-->
+
+<!--</script>-->
+</body>
+</html>

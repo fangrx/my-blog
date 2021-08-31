@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:mo="https://gitee.com/aun/dolphin">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+    <style>
+        img:hover {
+            padding:0 5px 5px 0;
+            background : #c3c3c3  ;
+        }
+    </style>
+</head>
+
+<body class="dolphin-layout-page">
+    <button type="button" class="layui-hide" id="test1"></button>
+    <div class="layui-card">
+        <div class="layui-card-header dolphin-card-header">
+            <span><i class="fa fa-bars"></i> 文件管理</span>
+            <i class="layui-icon layui-icon-refresh refresh-btn"></i>
+        </div>
+        <div class="layui-card-body">
+            <div class="layui-fluid">
+                <div id="fileManager" lay-filter="test"></div>
+            </div>
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                <legend>弹层选图</legend>
+            </fieldset>
+            <div class="layui-upload " >
+                <div style="width:150px;display:inline-block;">
+                    <div class="layui-upload-listv picview" data-name='pic1' >
+                        <img class="layui-upload-img">
+                        <p>&nbsp;</p>
+                    </div>
+                </div>
+                <div style="width:150px;display:inline-block;">
+                    <div class="layui-upload-listv picview" data-name='pic2' >
+                        <img class="layui-upload-img">
+                        <p>&nbsp;</p>
+                    </div>
+                </div>
+                <div style="width:150px;display:inline-block;">
+                    <div class="layui-upload-listv picview" data-name='pic3' >
+                        <img class="layui-upload-img">
+                        <p>&nbsp;</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+<script th:replace="/common/template :: script"></script>
+<script>
+    layui.use(['fileManager', 'layer', 'upload'], function () {
+        var fileManager = layui.fileManager
+            , $ = layui.$
+            , upload = layui.upload
+            , layer = layui.layer;
+        $('title').html($('title').html() + ' version:' + fileManager.v);
+        var upIns = upload.render({
+            elem: '#test1' //绑定元素
+            ,url: '/uploadFile'
+            , accept: 'file'
+        });
+        // layer.photos({
+        //     photos: '#fileManager'
+        //     ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+        // });
+        fileManager.render({
+            elem: '#fileManager'
+            , method: 'post'
+            , id: 'fmTest'
+            , btn_upload: true
+            , btn_create: true
+            , icon_url: '/lib/layui-filemanage/ico/'
+            , url: '/fileManager/getAllFileName'
+            , thumb: {'nopic': '/lib/layui-filemanage/upload/null-100x100.jpg', 'width': 100, 'height': 100}
+            , parseData: function (res) {
+                /*
+                data:[{
+                    thumb:文件地址用于显示
+                    ,type:文件类型  directory文件夹,png|gif|png|image图片,其它任意
+                    ,path:文件夹路径用于打开本文件夹
+                }]
+                */
+                let _res = [];
+                _res.code = 0;
+                _res.data = res.data;
+                _res.count = res.count
+                return _res;
+            }
+            , done: function (res, curr, count) {
+                // console.log(res,curr,count)
+            }
+            , page: {limit: 12,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']}
+            , where: {}
+        });
+        //监听图片选择事件
+        fileManager.on('pic(test)', function (obj) {
+            //obj.obj 当前对象
+            //obj.data 当前图片数据
+            var data = obj.data;
+            layer.open({
+                type:2
+                ,title: obj.data.name
+                , area: ['620px', '600px']
+                ,content: [obj.data.thumb, 'no']
+            })
+           // layer.alert(JSON.stringify(data), {
+             //   title: '当前数据：'
+           // });
+        });
+        //监听图片上传事件
+        fileManager.on('uploadfile(test)', function (obj) {
+            //obj.obj 当前对象
+            //obj.path 路径
+            //更改上传组件参数
+            upIns.config.data = {'path': obj.path};
+            upIns.config.done = function (e) {
+                layer.msg(e.msg);
+                if (e.code == 200) {
+                    fileManager.reload('fmTest');
+                }
+            }
+            var e = document.createEvent("MouseEvents");
+            e.initEvent("click", true, true);
+            document.getElementById("test1").dispatchEvent(e)
+        });
+        //监听新建文件夹事件
+        fileManager.on('new_dir(test)', function (obj) {
+            //obj.obj 当前对象
+            //obj.folder 文件夹名称
+            //obj.path 路径
+
+            $.post('/fileManager/createFolder', {'folder': obj.folder, 'path': obj.path}, function (e) {
+                layer.msg(e.msg);
+                if (e.code == 200) {
+                    fileManager.reload('fmTest');
+                }
+            })
+        });
+        //弹层选择
+        $(document).on('click','.picview',function(res){
+            let name = $(this).data('name');
+            layui.data('_fm', {key: '_picview_name',value: name});
+            layer.open({
+                type:2
+                , area: ['620px', '600px']
+                ,content: ['pop.html', 'no']
+            })
+        });
+        //弹层选择后的回调
+        window.callback = function(res){
+            let name = layui.data('_fm')._picview_name;
+            console.log(name)
+            $('.picview[data-name='+name+']').find('img').attr('src',res.thumb)
+            $('.picview[data-name='+name+']').find('p').text(res.name);
+            layui.data('_fm',null);
+        }
+    });
+</script>
+
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+</head>
+<body>
+    <div class="layui-form dolphin-compile">
+    <form th:action="@{/system/nBSysResource/save}">
+        <input type="hidden" name="id" th:if="${nBSysResource}" th:value="${nBSysResource.id}">
+        <div class="layui-form-item">
+            <label class="layui-form-label">资源路径</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="url" placeholder="请输入资源路径" th:value="${nBSysResource?.url}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">资源名称</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="name" placeholder="请输入资源名称" th:value="${nBSysResource?.name}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">权限标识</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="permission" placeholder="请输入权限标识" th:value="${nBSysResource?.permission}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">url的类型</label>
+            <div class="layui-input-inline">
+                <select name="type"  >
+                    <option  th:value="NAV_LINK" th:text="可做菜单链接"
+                             th:selected="${'NAV_LINK'==nBSysResource?.type}"
+                    >
+                    <option  th:value="OTHER" th:text="其他"  th:selected="${'OTHER'==nBSysResource?.type}">
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">数据类型</label>
+            <div class="layui-input-inline">
+                <select name="group" >
+                    <option  th:value="AJAX" th:text="AJAX"
+                             th:selected="${'AJAX'==nBSysResource?.group}"
+                    >
+                    <option  th:value="ROUTER" th:text="ROUTER"  th:selected="${'ROUTER'==nBSysResource?.group}">
+
+                    </option>
+                    <option  th:value="PAGE" th:text="PAGE"  th:selected="${'PAGE'==nBSysResource?.group}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入内容" class="layui-textarea" name="remark">[[${nBSysResource?.remark}]]</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item dolphin-finally">
+            <button class="layui-btn ajax-submit"><i class="fa fa-check-circle"></i> 保存</button>
+            <button class="layui-btn btn-secondary close-popup"><i class="fa fa-times-circle"></i> 关闭</button>
+        </div>
+    </form>
+</div>
+<script th:replace="/common/template :: script"></script>
+</body>
+</html>

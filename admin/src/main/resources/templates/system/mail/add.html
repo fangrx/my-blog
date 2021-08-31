@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+</head>
+<body>
+<div class="layui-card layui-form" lay-filter="formData">
+
+    <div class="layui-card-header">
+        <div class="pull-left layui-form-pane dolphin-search-box">
+            <div class="layui-inline">
+                <div class="layui-input-inline">
+                    <select name="mailBox"  >
+                        <option  th:each="item:${mailBoxList}" th:value="${item.mailBoxCode}" th:text="${item.mailBoxCode}"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="pull-right screen-btn-group">
+            <button class="layui-btn layui-btn-sm" id="uploadFile">
+                <i class="layui-icon layui-icon-upload"></i> 插入附件</button>
+            <button class="layui-btn layui-btn-sm " id="save" >
+                <i class="layui-icon layui-icon-release"></i> 保存</button>
+            <button class="layui-btn layui-btn-sm "  id="saveAndsend">
+                <i class="layui-icon layui-icon-file"></i> 发送</button>
+        </div>
+    </div>
+    <div class="layui-card-body">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">收件人</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" type="text" name="toUser" style="max-width: 1366px;" placeholder="请输入收件人" th:value="${mail?.receiveAddress}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">抄送人</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" type="text" name="ccUser" placeholder="抄送人" style="max-width: 1366px;" th:value="${mail?.receiveAddress}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">主题</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" type="text" name="title" placeholder="请输入主题" style="max-width: 1366px;" th:value="${mail?.subject}">
+                    </div>
+                </div>
+                <div class="layui-upload">
+                    <div class="layui-upload-list">
+                        <table class="layui-table">
+                            <thead>
+                            <tr><th>文件名</th>
+                                <th>路径</th>
+                                <th>操作</th>
+                            </tr></thead>
+                            <tbody id="demoList"></tbody>
+                        </table>
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <div class="layui-input-block" id="content-editor"  style="max-width: 1366px;">
+                        <textarea id="content" name="mailContHtml" th:text="${mail?.mailContHtml}" style="display: none;"></textarea>
+                    </div>
+                </div>
+        </div>
+</div>
+<script th:replace="/common/template :: script"></script>
+ <script type="text/javascript" th:src="@{/js/plugins/jquery-2.2.4.min.js}"></script>
+    <script>
+        layui.use(['layedit','upload','form'], function(){
+            var layedit = layui.layedit;
+            var form = layui.form;
+            var index=layedit.build('content',
+                {
+                    tool: [
+                        'strong' //加粗
+                        , 'italic' //斜体
+                        , 'underline' //下划线
+                        , 'del' //删除线
+
+                        , '|' //分割线
+
+                        , 'left' //左对齐
+                        , 'center' //居中对齐
+                        , 'right' //右对齐
+                        , 'link' //超链接
+                        , 'unlink' //清除链接
+                        , 'face' //表情
+                    ]
+                }
+            ); //建立编辑器
+
+
+            var upload = layui.upload;
+            var files = {};
+            //多文件列表示例
+            var demoListView = $('#demoList')
+                ,uploadListIns = upload.render({
+                elem: '#uploadFile'
+                ,url: '/upload?reqType=sendmail' //改成您自己的上传接口
+                ,accept: 'file'
+                ,multiple: true
+                ,auto: true
+                ,done: function(res){
+                    if(res.code == 200){ //上传成功
+                        var file = res.data;
+                        var tr = $(['<tr id="'+file.url +'">'
+                            ,'<td>'+ file.name +'</td>'
+                            ,'<td>'+ file.url +'</td>'
+                            ,'<td>'
+                            ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
+                            ,'</td>'
+                            ,'</tr>'].join(''));
+                        files[file.url] = res.data;
+                        //删除
+                        tr.find('.demo-delete').on('click', function(){
+                            delete files[file.url]; //删除对应的文件
+                            tr.remove();
+                            uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                        });
+                        demoListView.append(tr);
+                    }else{
+                       layer.msg(res.msg);
+                    }
+
+                }
+
+            });
+
+            $('#save').click(function () {
+                layedit.sync(index)
+                var formData =form.val("formData");
+                var attaIds = new Array();
+                $.each(files,function(key,values){
+                    attaIds.push(values);
+                });
+                formData.attaIds=JSON.stringify(attaIds);
+                formData.saveToDrag = 1;
+                $.post("/system/mail/save",formData,function(res){
+                        if (res.code==200){
+                            parent.location.reload();
+                        } else {
+                            layer.msg(res.msg);
+                        }
+                });
+
+            });
+            $('#saveAndsend').click(function () {
+                layedit.sync(index)
+                var formData =form.val("formData");
+                var attaIds = new Array();
+                $.each(files,function(key,values){
+                    attaIds.push(values);
+                });
+                formData.attaIds=JSON.stringify(attaIds);
+                $.post("/system/mail/save",formData,function(res){
+                    if (res.code==200){
+                        parent.location.reload();
+                    } else {
+                        layer.msg(res.msg);
+                    }
+                });
+
+            });
+
+
+
+        });
+
+
+    </script>
+</body>
+</html>

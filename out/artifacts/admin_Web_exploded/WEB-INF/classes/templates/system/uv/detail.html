@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+</head>
+<body>
+    <div class="dolphin-detail-page">
+        <div class="dolphin-detail-title">基本信息</div>
+        <table class="layui-table dolphin-detail-table">
+            <colgroup>
+                <col width="100px"><col>
+                <col width="100px"><col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <th>主键ID</th>
+                    <td th:text="${uv.id}"></td>
+                    <th>来源</th>
+                    <td th:text="${uv.fromUrl}"></td>
+                </tr>
+                <tr>
+                    <th>当前位置</th>
+                    <td th:text="${uv.nowUrl}"></td>
+                    <th>客户端标识</th>
+                    <td th:text="${uv.uuid}"></td>
+                </tr>
+                <tr>
+                    <th>Ip</th>
+                    <td th:text="${uv.ip}"></td>
+                    <th>会话标识</th>
+                    <td th:text="${uv.sessionId}"></td>
+                </tr>
+                <tr>
+                    <th>浏览器</th>
+                    <td th:text="${uv.browser}"></td>
+                    <th>系统</th>
+                    <td th:text="${uv.system}"></td>
+                </tr>
+                <tr>
+                    <th>进入时间</th>
+                    <td th:text="${#dates.format(uv.createDate, 'yyyy-MM-dd HH:mm:ss')}" ></td>
+                    <th>离开时间</th>
+                    <td th:text="${#dates.format(uv.updateDate, 'yyyy-MM-dd HH:mm:ss')}" ></td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+<script th:replace="/common/template :: script"></script>
+</body>
+</html>

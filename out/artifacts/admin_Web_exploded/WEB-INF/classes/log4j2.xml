@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" >
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <!-- 打印hibernate的info日志 -->
+        <Logger name="org.hibernate" level="info" additivity="false">
+            <AppenderRef ref="cntCorelog" />
+        </Logger>
+
+        <!-- 打印sql语句 -->
+        <Logger name="org.hibernate.SQL" level="debug" additivity="true">
+            <!--<AppenderRef ref="Console" />-->
+            <AppenderRef ref="cntCorelog" />
+        </Logger>
+
+        <Logger name="us.codecraft.webmagic.downloader" level="info" additivity="false">
+            <!--<AppenderRef ref="Console" />-->
+        </Logger>
+        <Logger name="us.codecraft.webmagic.Spider" level="error" additivity="false">
+            <!--<AppenderRef ref="Console" />-->
+        </Logger>
+        <!--&lt;!&ndash; 打印sql语句的参数绑定 &ndash;&gt;-->
+        <!--<Logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="trace" additivity="false">-->
+            <!--<AppenderRef ref="Console" />-->
+            <!--<AppenderRef ref="WritersAppender" />-->
+        <!--</Logger>-->
+
+        <!--&lt;!&ndash; 查询出来的结果集提取，如果嫌这个日志太多可以关掉 &ndash;&gt;-->
+        <!--<Logger name="org.hibernate.type.descriptor.sql.BasicExtractor" level="trace" additivity="false">-->
+            <!--<AppenderRef ref="Console" />-->
+            <!--<AppenderRef ref="WritersAppender" />-->
+        <!--</Logger>-->
+
+        <Root level="info" >
+            <AppenderRef ref="Console" />
+            <Logger name="com.nonelonely" level="debug" additivity="true">
+                <AppenderRef ref="cntCorelog" />
+            </Logger>
+        </Root>
+    </Loggers>
+</Configuration>

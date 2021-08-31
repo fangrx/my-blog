@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+</head>
+<body>
+    <div class="dolphin-detail-page">
+        <div class="dolphin-detail-title">基本信息</div>
+        <table class="layui-table dolphin-detail-table">
+            <colgroup>
+                <col width="100px"><col>
+                <col width="100px"><col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <th>主键ID</th>
+                    <td th:text="${comment.id}"></td>
+                    <th>父主键</th>
+                    <td th:text="${comment.parentId}"></td>
+                </tr>
+                <tr>
+                    <th>评论内容</th>
+                    <td th:utext="${comment.comment}"></td>
+                    <th>IP地址</th>
+                    <td th:text="${comment.ipAddr}"></td>
+                </tr>
+                <tr>
+                    <th>浏览器标识</th>
+                    <td th:text="${comment.userAgent}"></td>
+                    <th>IP所在地</th>
+                    <td th:text="${comment.ipCnAddr}"></td>
+                </tr>
+                <tr>
+                    <th>创建者</th>
+                    <td th:text="${comment.createBy?.nickname}"></td>
+                    <th>更新者</th>
+                    <td th:text="${comment.updateBy?.nickname}"></td>
+                </tr>
+                <tr>
+                    <th>创建时间</th>
+                    <td th:text="${#dates.format(comment.createDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <th>更新时间</th>
+                    <td th:text="${#dates.format(comment.updateDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+<script th:replace="/common/template :: script"></script>
+</body>
+</html>

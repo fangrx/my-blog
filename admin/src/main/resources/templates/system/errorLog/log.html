@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:mo="https://gitee.com/aun/dolphin">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+    <title>WebSSH</title>
+    <link rel="stylesheet" href="/css/xterm.css" />
+</head>
+<body class="dolphin-layout-page">
+<div class="layui-card">
+    <div class="layui-card-header dolphin-card-header">
+    </div>
+    <div class="layui-card-body">
+        <div id="terminal" style="width: 100%;height: 20px"></div>
+    </div>
+
+</div>
+
+<script th:inline="javascript">
+  var url =  [[${#params.value("webSocket_log_url")}]];
+</script>
+<script th:replace="/common/template :: script"></script>
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/xterm.js" charset="utf-8"></script>
+<script src="/js/webssh.js" charset="utf-8"></script>
+<script th:inline="javascript">
+
+    var term = new Terminal({
+        cols:150,
+        rows: 20, //行数
+        cursorBlink: true, // 光标闪烁
+        cursorStyle: "null", // 光标样式  null | 'block' | 'underline' | 'bar'
+        scrollback: 500, //回滚
+        tabStopWidth: 8, //制表宽度
+        screenKeys: true
+
+    });
+
+    term.open(document.getElementById('terminal'));
+    //在页面上显示连接中...
+    term.write('还未点击连接按钮\r\n');
+
+    openTerminal();
+    function openTerminal(){
+        var client = new WSSHClient();
+        term.clear();
+
+        term.on('data', function (data) {
+            //键盘输入时的回调函数
+            //client.sendClientData(data);
+        });
+
+        //在页面上显示连接中...
+        term.write('Connecting...\r');
+        //执行连接操作
+        client.connect({
+            onError: function (error) {
+                //连接失败回调
+                term.write('Error: ' + error + '\r');
+                $('#connect').attr('disabled',false);
+                $('#connect').removeClass("layui-btn-disabled");
+            },
+            onConnect: function () {
+                term.write('连接成功...\r');
+            },
+            onClose: function () {
+                //连接关闭回调
+                term.write("connection closed\r");
+
+            },
+            onData: function (data) {
+                //收到数据时回调
+                term.write(data+'\r');
+            }
+        });
+    }
+</script>
+</body>
+</html>

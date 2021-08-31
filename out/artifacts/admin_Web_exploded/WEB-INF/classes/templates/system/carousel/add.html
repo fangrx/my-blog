@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+</head>
+<body>
+    <div class="layui-form dolphin-compile">
+    <form th:action="@{/system/carousel/save}">
+        <input type="hidden" name="id" th:if="${carousel}" th:value="${carousel.id}">
+        <div class="layui-form-item">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="title" placeholder="请输入标题" th:value="${carousel?.title}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">跳转路径</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="url" placeholder="请输入图片路径" th:value="${carousel?.url}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">图片路径</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" id="imageUrl" name="imageUrl" placeholder="可手动输入图片路径" th:value="${carousel?.url}">
+            </div>
+            <div class="layui-input-inline">
+                <span class="layui-btn carouselImg" th:attr="data-url=@{/system/main/userPicture}"><i class="fa fa-check-circle"></i>上传图片</span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">时间</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="overTime"  id="overTime" th:value="${carousel?.overTime}" placeholder="yyyy-MM-dd">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入内容" class="layui-textarea" name="remark">[[${carousel?.remark}]]</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item dolphin-finally">
+            <button class="layui-btn ajax-submit"><i class="fa fa-check-circle"></i> 保存</button>
+            <button class="layui-btn btn-secondary close-popup"><i class="fa fa-times-circle"></i> 关闭</button>
+        </div>
+    </form>
+
+</div>
+<script th:replace="/common/template :: script"></script>
+    <script type="text/javascript" th:src="@{/js/plugins/jquery-2.2.4.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/plugins/jquery.mousewheel.min.js}"></script>
+    <script>
+
+        layui.use(['jquery','upload','laydate'], function () {
+            var $ = layui.jquery;
+            var upload = layui.upload;
+            var laydate = layui.laydate;
+
+            //常规用法
+            laydate.render({
+                elem: '#overTime'
+            });
+            //执行实例
+            var uploadInst = upload.render({
+                elem: '.carouselImg' //绑定元素
+                ,url: '/upload?reqType=carousel' //上传接口
+                ,accept: 'images'
+                ,done: function(res){
+                   if(res.code ==200){
+                       var  data = res.data;
+                       $('#imageUrl').val(data.path);
+                       layer.msg("上传图片成功！")
+                   }else{
+                       layer.msg("上传图片失败！")
+                   }
+                }
+                ,error: function(){
+                    //请求异常回调
+                    layer.msg("上传图片请求异常！")
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>

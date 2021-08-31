@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Window-target" content="_top">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title> 一个关于Java和Spring的个人博客</title>
+	<meta name="Author" th:content='${#params.value("author_name")}'>
+	<meta name="Copyright" th:content='${#params.value("author_name")}'>
+	<meta name="keywords" th:content='${#params.value("key_word")}' />
+	<meta name="description" th:content='${#params.value("website_info_title")}'/>
+
+
+
+	<link rel="stylesheet" th:href="@{/css/loading.css}">
+	<link rel="stylesheet" th:href="@{/css/scroll-bar.css}">
+	<link rel="stylesheet" th:href="@{/lib/layui-v2.3.0/css/layui.css}"  media="all">
+	<link rel="stylesheet" th:href="@{/css/common.css}">
+	<link rel="stylesheet" th:href="@{/css/suspension.css}">
+	<link rel="stylesheet" th:href="@{/css/animate.css}">
+	<link rel="stylesheet" th:href="@{/Eextend/iconfont/iconfont.css}">
+
+
+	<script type="text/javascript" th:src="@{/Eextend/iconfont/iconfont.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+	<script th:src="@{/lib/layui-v2.3.0/layui.js}" charset="utf-8"></script>
+	<script type="text/javascript" th:src="@{/js/wow.min.js}"></script>
+
+
+	<link rel="stylesheet" th:href="@{/css/Index.css}">
+
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+</head>
+<body>
+
+
+	<div th:replace="/common/fragment :: frontendHeadher"></div>
+<section class="bg-overlay layui-hide ">
+        <div class="overlay"></div>
+        <div class="layui-row text py-5" >
+              <div class="lead" th:utext='${#params.value("website_logo_small_words")}'>Keep on going never give up.</div>
+            <h1 id="code">
+				[[${words?.title}]]
+            </h1>
+            <a href="#welcome" class="layui-btn layui-btn-normal layui-btn-radius layui-btn-lg">Let's Go</a>
+        </div>
+
+		<div class=" nexts animated-circles animated">
+			<div class="circle c-1"></div>
+			<div class="circle c-2"></div>
+			<div class="circle c-3"></div>
+		</div>
+	   <a class="next wow fadeInUp animated" data-wow-duration="5s" href="#welcome" style="height: 54px;"></a>
+</section>
+    <section class="container">
+
+
+
+		<div id="welcome" class="target-fix"></div>
+		<div class="about">
+			<div class="row-container">
+				<div class="about-w3ls-info text-center py-5">
+					<h3>About Us</h3>
+					<p id="about_us" th:utext='${#params.value("about_us_title")}'></p>
+					<a href="/frontend/about" class="wow rotateIn" data-wow-delay="0.2s">Read More</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="blog">
+			<div class="row-container wow fadeInUp">
+				<div class="layui-row">
+					<h2 class="container-title">热门文章</h2>
+					<p class="container-lead text-muted" th:utext='${#params.value("lot_title")}'></p>
+				</div>
+				<div class="layui-row layui-col-space30 blog-body">
+					<div class="layui-col-md4 layui-col-sm6 layui-col-xs12" th:each="item:${list}">
+						<article class="card">
+							<a th:href="'/article/'+${item.id }">
+								<img class="card-img-top" th:if="${item.cover !=null && item.cover != ''}" th:src="${item.cover }" >
+								<img class="card-img-top" th:if="${item.cover ==null || item.cover == ''}" src="/images/test.jpg" >
+							</a>
+							<div class="card-body">
+								<div class="card-subtitle mb-2 text-muted">[[${item.createBy.nickname}]]&nbsp;&nbsp;[[${item.createDate}]]</div>
+								<h4 class="card-title"><a th:href="'/article/'+${item.id }">[[${#strings.length(item.title)>15?#strings.substring(item.title,0,15):item.title}]]...</a></h4>
+								<p class="card-text">[[${item.summary}]]</p>
+								<div class="text-right">
+									<a th:href="'/article/'+${item.id }" class="card-more">阅读更多&nbsp;<i class="layui-icon layui-icon-right"></i></a>
+								</div>
+							</div>
+						</article>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="new-comment">
+			<h3 class="tittle-wthree text-center">最近留言</h3>
+			&lt;!&ndash; Swiper &ndash;&gt;
+			<div id="swiper1" class="swiper-container wow zoomIn">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide" th:each="item:${messages}">
+						<div class="tesdolphinnials-gd-vj">
+							<p class="sub-test">
+								<i class="layui-icon layui-extend-quotation"></i>
+							   <div th:utext="${item.comment}"></div>
+							</p>
+							<div class="user">
+								<a href="#" target="_blank" rel="nofollow">
+									<div>
+										<img class="layui-circle" th:src="${item.createBy.picture}" alt="">
+										<h5 class="layui-elip">[[${item.createBy.nickname}]]</h5>
+									</div>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				&lt;!&ndash; Add Pagination &ndash;&gt;
+				<div class="swiper-pagination"></div>
+			</div>
+		</div>
+
+
+		<div id="statistics" class="bg-overlay">
+			<div class="overlay"></div>
+			<div class="row-container wow slideInLeft">
+				<div class="layui-row text-center">
+					<div class="layui-col-md3 layui-col-sm3 layui-col-xs6">
+						<i class="layui-icon layui-extend-dianzan"></i>
+						<h4 id="like-count" class="animateNum" data-animatetarget="2048"></h4>
+						<p>网站点赞数量</p>
+					</div>
+					<div class="layui-col-md3 layui-col-sm3 layui-col-xs6">
+						<i class="layui-icon layui-icon-dialogue"></i>
+						<h4 id="comment-count" class="animateNum" th:data-animatetarget="${countComment}"></h4>
+						<p>用户评论数量</p>
+					</div>
+					<div class="layui-col-md3 layui-col-sm3 layui-col-xs6">
+						<i class="layui-icon layui-extend-computer_icon"></i>
+						<h4 id="visit-count" class="animateNum" th:data-animatetarget="${visitor}"></h4>
+						<p>网站访问次数</p>
+					</div>
+					<div class="layui-col-md3 layui-col-sm3 layui-col-xs6">
+						<i class="layui-icon layui-extend-riqi"></i>
+						<h4 id="working-day" class="animateNum" data-animatetarget="180"></h4>
+						<p>网站运行天数</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="visitor">
+			<h3 class="tittle-wthree text-center">近期访客</h3>
+			&lt;!&ndash; Swiper &ndash;&gt;
+			<div id="swiper2" class="swiper-container wow flipInX">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide" th:each="item:${users}">
+						<a href="#" rel="nofollow">
+							<img class="layui-circle" th:src="${item.picture}" alt="">
+							<h4 class="layui-elip">[[${item.nickname}]]</h4>
+						</a>
+					</div>
+
+				</div>
+				&lt;!&ndash; Add Pagination &ndash;&gt;
+				<div class="swiper-pagination"></div>
+			</div>
+		</div>
+
+		&lt;!&ndash; Swiper CSS And JS &ndash;&gt;
+		<link href="Eextend/Swiper-4.5.0/css/swiper.min.css" rel="stylesheet" />
+		<script src="Eextend/Swiper-4.5.0/js/swiper.min.js"></script>
+		&lt;!&ndash; Running JS &ndash;&gt;
+		<script src="js/jquery.running.min.js"></script>
+		<script src="js/Index.js"></script>
+
+
+		&lt;!&ndash; InstanceEndEditable &ndash;&gt;
+    </section>-->
+	<div th:replace="/common/fragment :: frontendFooter"></div>
+	<div th:replace="/common/fragment :: frontendLongin"></div>
+
+	<script type="text/javascript" th:each='item:${#strings.arraySplit(#params.value("index_js"),",")}' th:src="${item}"></script>
+
+	<!-- 打字机特效js-->
+	<script type="text/javascript" th:src="@{/js/typewriter.js}"></script>
+	<script type="text/javascript" th:src="@{/js/Template.js}"></script>
+	<!-- 这个JS展示公告层用的，无关紧要可以删掉 -->
+	<!--<script src="js/TempShowTip.js"></script>-->
+    <script>
+        document.getElementById("code").typewriter();
+
+	</script>
+
+
+</body>
+<!-- InstanceEnd --></html>

@@ -1,0 +1,315 @@
+@charset "utf-8";
+/* CSS Document */
+
+.layui-container {
+    padding-top: 20px;
+}
+.text-center {
+    text-align: center !important;
+}
+/* 卡片样式 */
+.card {
+    position: relative;
+    padding: 30px 20px 20px 20px;
+    margin-bottom: 30px;
+    border-radius: 2px;
+    background-color: #fff;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.05);
+    -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.05);
+    -o-box-shadow: 0 0 3px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.05);
+    -ms-box-shadow: 0 0 3px rgba(0, 0, 0, 0.05);
+}
+.side-title {
+    font-size: 14.5px;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
+    color: #484848;
+    font-weight: normal;
+    position: relative;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+.side-title:hover:after {
+    width: 100%;
+}
+.side-title:after {
+    content: "";
+    position: absolute;
+    width: 65px;
+    height: 2px;
+    background: #000;
+    left: 0;
+    bottom: -1px;
+    -moz-transition: all 1s ease;
+    -webkit-transition: all 1s ease;
+    transition: all 1s ease;
+}
+.card .side-title span {
+    margin: 0 5px;
+}
+
+/* 详细信息 */
+.details {
+   margin-bottom:20px;
+}
+.details:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: '';
+    height: 0;
+    width: 0;
+    display: block;
+    border: 10px transparent solid;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-top-color: #1E9FFF;
+    z-index: 10;
+}
+.title {
+    font: 22px "Microsoft YaHei", Arial, Helvetica, sans-serif;
+    color: #000;
+    font-weight: bold;
+}
+.details-info {
+    margin-top: 20px;
+    color: #808080;
+    text-align: center;
+}
+.details-info > a {
+    color: #808080;
+}
+.details-info .layui-icon {
+    margin: 0 5px;
+}
+.details-info .layui-extend-fenlei {
+    position:relative;
+    top:0.8px;
+}
+.details-info span {
+    margin-right: 20px;
+}
+.details-info a:hover {
+    color:#333;
+}
+.details-info a:last-child span {
+    margin-right: 0px;
+}
+
+/* 内容 */
+
+/* 内容 */
+.details-content {
+    padding: 5px;
+    color: #333;
+    font-family: "Microsoft YaHei",Helvetica,"Meiryo UI","Malgun Gothic","Segoe UI","Trebuchet MS",Monaco,monospace,Tahoma,STXihei,"åŽæ–‡ç»†é»‘",STHeiti,"Helvetica Neue","Droid Sans","wenquanyi micro hei",FreeSans,Arimo,Arial,SimSun,"å®‹ä½“",Heiti,"é»‘ä½“",sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+}
+.details-content table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    display: block;
+    width: 100%;
+    overflow: auto;
+    word-break: normal;
+    word-break: keep-all;
+}
+.details-content table th{font-weight:700}
+.details-content table td,
+.details-content table th{padding:6px 13px;border:1px solid #ddd}
+.details-content table tr{background-color:#fff;border-top:1px solid #ccc}
+.details-content table tr:nth-child(2n){background-color:#f8f8f8}
+.details-content img {
+    margin:5px;
+}
+.details-content p {
+    line-height: 30px;
+}
+.details-content h3 {
+    line-height: 35px;
+    font-size: 15px;
+    font-weight: 600;
+    border-left: 4px solid #1E9FFF;
+    padding-left: 20px;
+    padding-right: 10px;
+    background: #F2F2F2 none repeat scroll 0% 0%;
+    margin: 15px -25px;
+}
+.details-content a{
+    color: #009688;
+}
+.details-content > ol{list-style-type:none;counter-reset:sectioncounter;}
+.details-content > ol li:before {
+    content:counter(sectioncounter) "、";
+    counter-increment:sectioncounter;
+}
+ul,
+ol {
+    padding-left: 15px;
+}
+
+li {
+    margin: 10px;
+}
+
+li p {
+    margin: 10px 0 !important;
+}
+ul {
+    list-style-type: circle;
+}
+ /* 内容脚 */
+.details-footer {
+    margin-top: 50px;
+}
+.details-footer h3 {
+    line-height: 35px;
+    font-size: 15px;
+    font-weight: 600;
+    border-left: 4px solid #1E9FFF;
+    padding-left: 20px;
+    padding-right: 10px;
+    background: #F2F2F2 none repeat scroll 0% 0%;
+    margin: 15px -20px;
+}
+.details-footer p {
+    line-height: 30px;
+    font-weight:500;
+    font-size:15px;
+}
+.details-footer p a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    color:#777;
+}
+.praise {
+    text-align: center;
+    margin-bottom: 15px;
+}
+.praise p {
+    padding: 0 30px;
+    margin-bottom: 15px;
+    min-height: 24px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #969696;
+}
+.praise .layui-btn {
+    min-width: 110px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #ea6f5a;
+    border-radius: 20px;
+}
+.praise .layui-btn:hover {
+    background-color: #ec6149 !important;
+}
+
+/* 文章评论 */
+.comment .side-title {
+    font-size: 16px;
+}
+.comment .side-title:hover:after {
+    width: 85px;
+}
+.comment .editor-box {
+    margin-top: 15px;
+}
+.comment .blog-comment {
+    margin-top: 10px;
+}
+#page {
+    text-align: right;
+}
+
+/* 媒体查询 */
+@media screen and (min-width: 1400px) {
+    .layui-container {
+        width: 100%;
+    }
+}
+
+blockquote,
+q {
+    color: rgb(102, 102, 102);
+    padding: 0px 15px;
+    margin-left: 0px;
+    font-size: 14px;
+    font-style: italic;
+    border-left: 4px solid rgb(221, 221, 221);
+
+}
+
+blockquote::before,
+blockquote::after,
+q::before,
+q::after {
+    content: none;
+}
+/**
+目录
+ */
+.lmNav {
+    padding:20px 0 13px 0;
+}
+.lmNav .side-title {
+    margin-left:20px;
+    margin-right:20px;
+}
+.lmNav ul {
+    overflow: hidden;
+    display: block;
+    list-style-type: disc;
+    padding-left: 0;
+}
+.lmNav li {
+padding: 5px 10px 0;
+    margin: 0px;
+}
+.lmNav li:hover {
+border-left: 3px solid #5FB878;
+border-top: 3px solid transparent;
+border-bottom: 3px solid transparent;
+}
+.lmNav li:hover a {
+color:#555444;
+}
+.lmNav li a {
+display: block;
+/*line-height:30px;*/
+border-bottom: 1px solid #f8f9f7;
+transition: none;
+text-decoration: none;
+color: #787977;
+}
+.lmNav li a .layui-row .layui-elip {
+padding-right: 5px;
+}
+.lmNav li a .layui-row .layui-col-xs2 {
+text-align: right;
+}
+
+.site-tree .layui-tree .title {
+    line-height: 36px;
+    border-left: 3px solid #5FB878;
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    background-color: #f2f2f2;
+    font-size: 14px;
+    padding: 0 10px;
+}
+
+.site-tree .layui-tree li:hover {
+    border-left: 3px solid #5FB878;
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+}
+.layui-btn {
+    color: #fff !important;
+}
+.emoji {
+    width: 24px;
+    height: 24px;
+}

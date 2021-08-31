@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+</head>
+<body>
+    <div class="dolphin-detail-page">
+        <div class="dolphin-detail-title">基本信息</div>
+        <table class="layui-table dolphin-detail-table">
+            <colgroup>
+                <col width="100px"><col>
+                <col width="100px"><col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <th>主键ID</th>
+                    <td th:text="${nBSysResource.id}"></td>
+                    <th>资源路径</th>
+                    <td th:text="${nBSysResource.url}"></td>
+                </tr>
+                <tr>
+                    <th>资源名称</th>
+                    <td th:text="${nBSysResource.name}"></td>
+                    <th>权限标识</th>
+                    <td th:text="${nBSysResource.permission}"></td>
+                </tr>
+                <tr>
+                    <th>url的类型</th>
+                    <td th:text="${nBSysResource.type}"></td>
+                    <th>数据类型</th>
+                    <td th:text="${nBSysResource.group}"></td>
+                </tr>
+                <tr>
+                    <th>创建时间</th>
+                    <td th:text="${#dates.format(nBSysResource.createDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <th>更新时间</th>
+                    <td th:text="${#dates.format(nBSysResource.updateDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                </tr>
+                <tr>
+                    <th>备注</th>
+                    <td th:text="${nBSysResource.remark}" colspan="3"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+<script th:replace="/common/template :: script"></script>
+</body>
+</html>

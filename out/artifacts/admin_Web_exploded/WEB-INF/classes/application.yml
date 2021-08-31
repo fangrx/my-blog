@@ -1,0 +1,105 @@
+### 服务器配置
+server:
+  port: 8095  #监听到http的端口号后转向到的https的端口号，默认443  若没有ssl配置，更改端口即更改此属性即可
+  ssl:
+    enabled: false #网站是否启用ssl，默认false（不启用）
+    key-store: classpath:aliyu.pfx   #启用了ssl之后需要配置证书，以下的配置为证书配置
+    key-store-password: hIOA3Scv    #证书密码
+    key-store-type: PKCS12   #证书类型，默认jks，如需要ssl配置，放开此配置项属性即可 阿里云的是PKCS12
+  http:
+    port: 8000  #项目监听的http的端口号，默认80  若没有ssl配置，则这个参数无效
+  compression:    #GZIP压缩
+    enabled: true  #是否开启压缩
+    min-response-size: 2048 #大于2KB的文件才进行压缩。用于指定压缩的最小数据大小，单位B，默认2048B。
+    mime-types:              #会被压缩的MIME类型列表，多个逗号隔，表明支持html、xml、js、css、json等文件格式的压缩。
+    - image/png
+    - image/jpeg
+    - image/jpg
+    - text/html
+    - application/javascript
+    - text/css
+    - application/octet-stream
+    - application/json
+
+### dolphin配置
+project:
+  captcha-open: false                         #是否开启登录验证码
+  shiro:
+    remember-me-timeout: 7                    #cookie记住登录信息时间，默认7天（天）
+    global-session-timeout: 1800              #Session会话超时时间，默认30分钟（秒）
+  upload:
+    #file-path:                               #文件上传路径，默认在项目根目录upload下
+    static-path: /upload/**                   #上传文件静态访问路径
+
+### spring配置
+spring:
+  ## 数据库配置
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://110.40.173.171:3306/myblog?useSSL=false&characterEncoding=utf-8
+    username: root
+    password: Admin123456!
+    # 连接池配置
+    druid:
+      # 初始化大小，最小，最大
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      # 配置获取连接等待超时的时间
+      max-wait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位毫秒
+      time-between-eviction-runs-millis: 60000
+      # 配置一个连接在池中最小生存时间
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM sys_user
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      # 打开 PSCache，并且指定每个连接上 PSCache 的大小
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      # 配置监控统计拦截的 Filter，去掉后监控界面 SQL 无法统计，wall 用于防火墙
+      filters: stat,wall,log4j
+      # 通过 connection-properties 属性打开 mergeSql 功能；慢 SQL 记录
+      connection-properties: druid.stat.mergeSql\=true;druid.stat.slowSqlMillis\=5000
+      # 配置 DruidStatFilter
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: .js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*
+      # 配置 DruidStatViewServlet
+      stat-view-servlet:
+        url-pattern: /druid/*
+        # IP 白名单，没有配置或者为空，则允许所有访问
+        allow: 127.0.0.1
+        # IP 黑名单，若白名单也存在，则优先使用
+        deny: 192.168.31.253
+        # 禁用 HTML 中 Reset All 按钮
+        reset-enable: false
+        # 登录用户名/密码
+        #login-username: root
+        #login-password: 123
+  ## jpa配置
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.dialect: com.nonelonely.common.mysql.MySQLDialectUTF8
+      ## hibernate.format_sql: false
+    open-in-view: false
+
+  ## thymeleaf模板设置
+  thymeleaf:
+    prefix: classpath:/templates
+    suffix: .html
+    mode: HTML
+    encoding: utf-8
+    servlet.content-type: text/html
+    cache: false
+
+  ## 文件上传配置
+  servlet:
+    multipart:
+      max-file-size: 10GB
+      max-request-size: 10GB

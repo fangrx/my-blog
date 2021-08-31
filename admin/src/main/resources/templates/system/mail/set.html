@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+
+</head>
+
+<body class="layui-container " style="margin-top: 10px">
+
+        <div class="layui-row">
+            <div class="layui-col-xs4 layui-col-space10">
+                <div class="layui-transfer-box" data-index="0" style=" height: 400px;">
+                    <ul class="layui-nav layui-nav-tree " lay-filter="mailBoxFilter" style="width: 100%;  height: 360px;">
+                        <!-- 侧边导航: <ul class="layui-nav layui-nav-tree layui-nav-side"> -->
+                        <li class="layui-nav-item" th:each="item:${mailBoxList}">
+                            <a href="javascript:;" th:attr="id=${item.id}">[[${item.mailBoxCode}]]</a>
+                        </li>
+                    </ul>
+                    <div class="layui-btn-group" style="margin-top: 10px">
+                        <button type="button" class="layui-btn layui-btn-sm" data-method="new">新建</button>
+                        <button type="button" class="layui-btn layui-btn-sm" data-method="del">删除</button>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-xs8 layui-col-space10">
+                <div class="layui-transfer-box layui-form" data-index="0" style="width: 100%; height: 400px;" lay-filter="formData">
+                    <form th:action="@{/system/mail/saveMailBox}" >
+                        <input type="hidden" name="id" >
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">Email地址</label>
+                            <div class="layui-input-inline">
+                                <input class="layui-input" type="text" name="mailBoxCode" placeholder="Email地址" >
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">密码</label>
+                            <div class="layui-input-inline">
+                                <input class="layui-input" type="password" name="mailBoxPwd" placeholder="密码" >
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">发送名称</label>
+                            <div class="layui-input-inline">
+                                <input class="layui-input" type="text" name="mailBoxName" placeholder="发送名称" >
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">邮箱类型</label>
+                            <div class="layui-input-inline">
+                                <select name="mailBoxType"  >
+                                    <option  th:value="2" th:text="POP3"
+                                             ></option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">收件服务器</label>
+                            <div class="layui-input-inline">
+                                <input class="layui-input" type="text" name="mailPop3Url" placeholder="收件服务器" >
+                            </div>
+                            <div class="layui-inline">
+                                <input type="checkbox" name="mailIsSsl" lay-text="开启SSH|关闭SSH" lay-skin="switch" value="true">
+                            </div>
+                            <div class="layui-inline" style="width: 45px;">
+                                <input class="layui-input" type="text" name="mailPop3Port" value="110">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">发件服务器</label>
+                            <div class="layui-input-inline">
+                                <input class="layui-input" type="text" name="mailSmtpUrl" placeholder="发件服务器" >
+                            </div>
+                            <div class="layui-inline">
+                                <input type="checkbox" name="mailSmtpIsSsl" lay-text="开启SSH|关闭SSH" lay-skin="switch" value="true">
+                            </div>
+                            <div class="layui-inline" style="width: 45px;">
+                                <input class="layui-input" type="text" name="mailSmtpPort" value="25">
+                            </div>
+                        </div>
+                        <div class="layui-form-item dolphin-finally">
+                            <button class="layui-btn ajax-submit"><i class="fa fa-check-circle"></i> 保存</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+<script th:replace="/common/template :: script"></script>
+<script>
+    layui.use(['form','element'], function () {
+        var form = layui.form;
+        var element = layui.element;
+        var $ = layui.$;
+        var mailCodeId = '';
+        /* 监听导航栏事件，实现标签页的切换 */
+        element.on("nav(mailBoxFilter)", function ($this) {
+            mailCodeId = $this.attr('id');
+           $.get("/system/mail/mailBoxDetail/"+mailCodeId,function (result) {
+               if (result.code == 200){
+                   var data = result.data;
+                   form.val("formData",data);
+                   mailCode = data.mailBoxCode;
+               } else {
+                   layer.msg(result.msg);
+               }
+           });
+
+
+        });
+
+        $(".layui-btn-sm").click(function () {
+            var method = $(this).attr("data-method");
+            if (method=="new"){
+                document.location.reload();
+            } else if(method == "del"){
+                    if(mailCodeId){
+                        layer.confirm( '是否删除？', {
+                            title: '提示',
+                            btn: ['确认', '取消']
+                        }, function () {
+                            var url = '/system/mail/mailBox/status/delete?ids='+mailCodeId;
+                            $.get(url,function (result) {
+                                if (result.code == 200){
+                                    document.location.reload();
+                                    parent.location.reload();
+                                }
+                                layer.msg(result.msg);
+                            });
+                        });
+                    }else{
+                        layer.msg("选择一个账号");
+                    }
+            }
+
+        });
+    });
+
+
+</script>
+</body>
+</html>

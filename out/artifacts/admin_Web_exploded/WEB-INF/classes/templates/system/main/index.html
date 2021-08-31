@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+    <style>
+        a{
+            color: #005980;
+        }
+        .widget-small-info h4{
+            font-size: 18px;
+        }
+        .widget-small-info span{
+            font-size: 16px;
+        }
+        .project-introduce h4{
+            font-weight: bold;
+            margin-top: 12px;
+            margin-bottom: 8px;
+        }
+        .project-introduce li{
+            list-style: decimal;
+            margin-left: 28px;
+        }
+
+    </style>
+</head>
+<body class="dolphin-layout-page">
+<div class="layui-row layui-col-space15">
+    <div class="layui-col-md8">
+        <div class="layui-card">
+            <div class="layui-card-header">数据统计</div>
+            <div class="layui-card-body" style="height: 300px">
+                <div class="layui-btn-group">
+                    <button type="button" class="layui-btn  layui-btn-sm count">Uv</button>
+                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm count">Pv</button>
+                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm count">Ip</button>
+                </div>
+                <div id="uv" style="width: 100%;height: 100%"></div>
+            </div>
+        </div>
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">地域分布</div>
+                    <div class="layui-card-body" style="height: 350px">
+                        <div id="map" style="width: 100%;height: 100%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">浏览器分布</div>
+                    <div class="layui-card-body" style="height: 350px">
+                        <div id="browser" style="width: 100%;height: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-col-md4">
+        <div class="layui-card">
+            <div class="layui-card-header">top 10</div>
+            <div class="layui-card-body layui-text">
+                <div class="layui-carousel index-carousel" id="test1" >
+                    <div carousel-item>
+                        <div>
+                            <table class="layui-table">
+                                <thead>
+                                <tr>
+                                    <th>来源网站</th>
+                                    <th>浏览量(PV)</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="item:${fromUrls}">
+                                    <td th:text="${item.url} == ''?'直接访问':${item.url}">来源网站</td>
+                                    <td th:text="${item.value}">浏览量(PV)</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <table class="layui-table">
+                                <thead>
+                                <tr>
+                                    <th>入口地址</th>
+                                    <th>浏览量(PV)</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="item:${nowUrls}">
+                                    <td ><a th:href="${item.url}" target="_blank" th:text="${item.url}">人口地址</a></td>
+                                    <td th:text="${item.value}">浏览量(PV)</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:replace="/common/template :: script"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
+
+<script th:inline="javascript">
+    layui.use(['laydate','carousel','element'], function() {
+        var laydate = layui.laydate;
+        var $ = layui.$;
+        var element = layui.element;
+        //常规用法
+        laydate.render({
+            elem: '#start'
+        });
+
+        //国际版
+        laydate.render({
+            elem: '#end'
+            , lang: 'en'
+        });
+        var carousel = layui.carousel;
+        //建造实例
+        carousel.render({
+            elem: '#test1'
+            ,width: '100%' //设置容器宽度
+            ,arrow: 'none' //始终显示箭头
+            ,autoplay:false
+            ,height: '490px'
+            //,anim: 'updown' //切换动画方式
+        });
+
+        $.get("/system/main/map",function (data) {
+            console.log(data);
+            data.forEach((item, index) => {
+                item.name = item.name.replace('市','').replace('省','');
+            });
+            createMap(data);
+        });
+
+
+        $.get("/system/uv/countUv?type=Uv",function (data) {
+            createLine(data);
+        });
+        $.get("/system/uv/countBrowser",function (data) {
+            createbrowser(data);
+        });
+        $(".count").on("click", function () {
+            $(".count") .addClass("layui-btn-primary");
+            $(this).removeClass("layui-btn-primary");
+            $.get("/system/uv/countUv?type="+$(this).text(),function (data) {
+                createLine(data);
+            });
+        });
+
+    });
+    function createLine(dataList) {
+        var dom = document.getElementById("uv");
+        var myChart = echarts.init(dom);
+        var option = {
+            legend: {},
+            tooltip: {},
+            dataset: {
+                // 提供一份数据。
+                dimensions: ['Uv', '今天', '昨天'],
+                source: dataList
+            },
+            // 声明一个 X 轴，类目轴（category）。默认情况下，类目轴对应到 dataset 第一列。
+            xAxis: {type: 'category'},
+            // 声明一个 Y 轴，数值轴。
+            yAxis: {},
+            // 声明多个 bar 系列，默认情况下，每个系列会自动对应到 dataset 的每一列。
+            series: [
+                {type: 'line'},
+                {type: 'line'}
+            ],
+            color: ['#ca8622', '#51d41d']
+
+        }
+
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+    }
+    function createbrowser(dataList) {
+        var dom = document.getElementById("browser");
+        var myChart = echarts.init(dom);
+        var option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            series: [
+                {
+                    name: '访问浏览器',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '50%'],
+                    data: dataList.sort(function (a, b) { return a.value - b.value; }),
+                    label: {
+                        color: 'rgba(255, 255, 255, 0.3)'
+                    },
+                    labelLine: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.3)'
+                        },
+                        smooth: 0.2,
+                        length: 10,
+                        length2: 20
+                    }
+                }
+            ]
+        };
+
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+    }
+    function createMap(dataList) {
+        var myChart = echarts.init(document.getElementById('map'));
+        option = {
+            tooltip: {
+                formatter:function(params,ticket, callback){
+                    return params.seriesName+'<br />'+params.name+'：'+params.value
+                }
+            },
+            visualMap: {
+                min: 0,
+                max: 100,
+                left: 'left',
+                top: 'bottom',
+                text: ['高','低'],
+                inRange: {
+                    color: ['#e0ffff', '#006edd']
+                },
+                show:true
+            },
+            geo: {
+                map: 'china',
+                roam: false,
+                zoom:1.23,
+                label: {
+                    normal: {
+                        show: true,
+                        fontSize:'10',
+                        color: 'rgba(0,0,0,0.7)'
+                    }
+                },
+                itemStyle: {
+                    normal:{
+                        borderColor: 'rgba(0, 0, 0, 0.2)'
+                    },
+                    emphasis:{
+                        areaColor: '#F3B329',
+                        shadowOffsetX: 0,
+                        shadowOffsetY: 0,
+                        shadowBlur: 20,
+                        borderWidth: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            },
+            series : [
+                {
+                    name: '信息量',
+                    type: 'map',
+                    geoIndex: 0,
+                    data:dataList
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+
+
+
+
+</script>
+</body>
+</html>
+

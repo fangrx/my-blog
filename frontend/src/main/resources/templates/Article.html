@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Window-target" content="_top">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- InstanceBeginEditable name="doctitle" -->
+    <title>[[${#params.value("website_logo_words")}]] - 让技术一直陪伴着你</title>
+    <!-- InstanceEndEditable -->
+	<meta name="bytedance-verification-code" content="brta9c9ldQb5NgFjXbxP" />
+	<meta name="Author" th:content='${#params.value("author_name")}'>
+	<meta name="Copyright" th:content='${#params.value("author_name")}'>
+	<meta name="keywords" th:content='${#params.value("key_word")}' />
+	<meta name="description" th:content='${#params.value("website_info_title")}'/>
+
+
+	<link rel="stylesheet" th:href="@{/ css/loading.css}">
+	<link rel="stylesheet" th:href="@{/css/scroll-bar.css}">
+	<link rel="stylesheet" th:href="@{/lib/layui-v2.3.0/css/layui.css}">
+	<link rel="stylesheet" th:href="@{/css/common.css}">
+	<link rel="stylesheet" th:href="@{/css/suspension.css}">
+	<link rel="stylesheet" th:href="@{/css/animate.css}">
+	<link rel="stylesheet" th:href="@{/Eextend/iconfont/iconfont.css}">
+
+	<link rel="stylesheet" th:href="@{/css/Article.css}">
+
+
+	<script type="text/javascript" th:src="@{/Eextend/iconfont/iconfont.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/lib/layui-v2.3.0/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/js/wow.min.js}"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+	<div th:replace="/common/fragment :: frontendHeadher"></div>
+<!--<section class="bg-overlay layui-hide">-->
+        <!--<div class="overlay"></div>-->
+        <!--<div class="layui-row text py-5">-->
+            <!--<p class="lead">Keep on going never give up.</p>-->
+            <!--<h1>-->
+                <!--我为你翻山越岭，却无心看风景-->
+            <!--</h1>-->
+            <!--<a href="#welcome" class="layui-btn layui-btn-normal layui-btn-radius layui-btn-lg">Let's Go</a>-->
+        <!--</div>-->
+    <!--</section>-->
+    <section class="container">
+		<!-- InstanceBeginEditable name="EditRegion1" -->
+		<div class="layui-container">
+			<div class="layui-row layui-col-space20">
+				<div class="layui-col-md2 layui-col-sm12 layui-col-xs12 ">
+					<div class="card lmNav">
+
+						<ul>
+							<li th:each="item:${cateList}">
+								<a  th:href="'/article/pages?cateId='+${item.id}" >
+									<div class="layui-row">
+										<div class="layui-col-xs12 layui-elip" th:style="'color:' + @{(${item.id == curCateId} ? 'red' : '')} + ''"  >[[${item.cnName}]]</div>
+										<!--<div class="layui-col-xs2"><span class="layui-badge-rim">[[${item.name}]]</span></div>-->
+									</div>
+								</a>
+							</li>
+						</ul>
+					</div>
+
+				</div>
+				<div class="layui-col-md7 layui-col-sm12 layui-col-xs12 post-area">
+					<div class="layui-carousel" id="carousel" style="    margin-bottom: 20px;">
+						<div carousel-item>
+							<div th:each="item,loopStatus:${carouselList}">
+								<a th:href="${item.url }" target="_blank" >
+								<img th:src="${item.imageUrl }" th:alt="${item.title }" style="width: 100%;height: 230px">
+							    </a>
+								<cite class="carousel-cite">[[${item.title}]]</cite>
+							</div>
+
+						</div>
+					</div>
+					<div class="single-post" th:each="item,loopStatus:${articlesList.pageArticle}">
+						<div class="inner-post" >
+							<div class="post-img">
+								<a th:href="'/article/'+${item.id }">
+									<img th:if="${item.cover !=null && item.cover != ''}" th:src="${item.cover }" >
+								</a>
+							</div>
+							<div class="post-info" th:style="'width:' + @{(${item.cover !=null && item.cover != ''} ? '75%' : '100%')} + ''">
+								<div class="post-title">
+									<h3>
+										<a  th:href="'/article/'+${item.id }">[[${item.title}]]</a>
+									</h3>
+								</div>
+								<div class="post-content">
+									<p>
+										[[${item.summary}]]
+									</p>
+								</div>
+								<div class="blog-meta" style="margin-top:0px">
+									<ul>
+										<li>
+											<i class="layui-icon layui-icon-note"></i>
+											<a th:href="'/article/pages?cateId='+${item.cate.id}">[[${item.cate.cnName}]]</a>
+										</li>
+										<li>
+											<i class="layui-icon layui-icon-log"></i>[[${item.createDate}]]
+										</li>
+										<li>
+											<i class="layui-icon layui-extend-wiappfangwenliang"></i>浏览（<a  th:href="'/article/'+${item.id }">[[${item.views}]]</a>）
+										</li>
+									</ul>
+									<div class="post-readmore">
+										<a th:href="'/article/'+${item.id }">阅读更多</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="post-date one">
+						<span th:if="${item.top}">推荐</span>
+						</div>
+					</div>
+					<!--<div th:utext="${articlesList.layPage}"></div>-->
+					<!--<div id="page" class="wow rotateInDownLeft"></div>-->
+				</div>
+
+				<div class="layui-col-md3 layui-col-sm12 layui-col-xs12">
+				  	<div class="card search wow flipInY" data-wow-delay="0.5s">
+						<i class="layui-icon layui-icon-search" onclick="window.open('http://zhannei.baidu.com/cse/search?s=6583887351044514798&entry=1&q='+document.getElementById('keyWord').value)" ></i>
+						<input id="keyWord" type="text" autocomplete="off" placeholder="Search..." class="layui-input">
+            		</div>
+					<div class="card ">
+						<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+							<ul class="layui-tab-title">
+								<img src="/images/22.jpg"style="width: 50px; float: left;">
+								<li class="layui-this">日排行</li>
+								<li>月排行</li>
+								<li>总排行</li>
+							</ul>
+							<div class="layui-tab-content">
+								<div class="layui-tab-item layui-show paihang">
+									<ul>
+										<li th:each="item,loopStatus:${weekList}">
+											<span th:if="${loopStatus.count<4}" class="layui-badge">[[${loopStatus.count  }]]</span>
+											<span th:if="${loopStatus.count>3}" class="layui-badge layui-bg-gray">[[${loopStatus.count  }]]</span>
+											<a  th:href="'/article/'+${item.id }">
+												[[${item.title}]]
+											</a>
+										</li>
+									</ul>
+								</div>
+								<div class="layui-tab-item  paihang">
+									<ul>
+										<li th:each="item,loopStatus:${monthList}">
+											<span th:if="${loopStatus.count<4}" class="layui-badge">[[${loopStatus.count  }]]</span>
+											<span th:if="${loopStatus.count>3}" class="layui-badge layui-bg-gray">[[${loopStatus.count  }]]</span>
+											<a  th:href="'/article/'+${item.id }">
+												[[${item.title}]]
+											</a>
+										</li>
+									</ul>
+								</div>
+								<div class="layui-tab-item  paihang">
+									<ul>
+										<li th:each="item,loopStatus:${zong}">
+											<span th:if="${loopStatus.count<4}" class="layui-badge">[[${loopStatus.count  }]]</span>
+											<span th:if="${loopStatus.count>3}" class="layui-badge layui-bg-gray">[[${loopStatus.count  }]]</span>
+											<a  th:href="'/article/'+${item.id }">
+												[[${item.title}]]
+											</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+
+		<script type="text/javascript" th:src="@{/js/Article.js}"></script>
+
+
+		<!-- InstanceEndEditable -->
+    </section>
+	<div th:replace="/common/fragment :: frontendFooter"></div>
+	<div th:replace="/common/fragment :: frontendLongin"></div>
+
+	<!-- 打字机特效js-->
+	<script type="text/javascript" th:src="@{/js/typewriter-special-effects.js}"></script>
+	<script type="text/javascript" th:src="@{/js/Template.js}"></script>
+	<script type="text/javascript" th:src="@{/js/hc-sticky.js}"></script>
+    <script th:inline="javascript">
+        new hcSticky('.layui-col-md2', {
+            stickTo: '.layui-col-md7'
+			,top: 50
+        });
+        new hcSticky('.layui-col-md3', {
+            stickTo: '.layui-col-md7'
+            ,top: 50
+        });
+        var totalPages = [[${articlesList.totalPages}]];
+        var url = [[${articlesList.url}]];
+        layui.use(['flow','element','carousel'], function() {
+            var flow = layui.flow,
+            element = layui.element; //
+            flow.load({
+                elem: '.post-area' //流加载容器
+				,isAuto: true
+                , done: function (page, next) { //执行下一页的回调
+                    page = page+1;
+                    var lis = [];
+                    $.get('/article/ajaxPages?limit=10&page='+page+url, function(res){
+                        //假设你的列表返回在data集合中
+                        layui.each(res.data, function(index, item){
+                            lis.push(getString(item));
+                        });
+                        next(lis.join(''), page < totalPages);
+                    });
+                }
+            });
+            var carousel = layui.carousel;
+            //建造实例
+            carousel.render({
+                elem: '#carousel'
+                ,width: '100%' //设置容器宽度
+                ,height: '230px'
+                ,arrow: 'always' //始终显示箭头
+                //,anim: 'updown' //切换动画方式
+            });
+
+        })
+
+		function getString(data) {
+
+            var str = '     <div class="single-post" >\n' +
+                '      <div class="inner-post" >\n' +
+                '       <!--<div class="post-img">-->\n' +
+                '        <!--<a th:href="\'/article/\'+${item.id }">-->\n' +
+                '         <!--<img th:if="${item.cover !=null && item.cover != \'\'}" th:src="${item.cover }" >-->\n' +
+                '         <!--<img th:if="${item.cover ==null || item.cover == \'\'}" src="/images/test.jpg" >-->\n' +
+                '        <!--</a>-->\n' +
+                '       <!--</div>-->\n' +
+                '       <div class="post-info" style="width: 100%; ">\n' +
+                '        <div class="post-title">\n' +
+                '         <h3>\n' +
+                '          <a  href="/article/'+data.id +'">'+data.title+'</a>\n' +
+                '         </h3>\n' +
+                '        </div>\n' +
+                '        <div class="post-content">\n' +
+                '         <p>\n' +data.summary +
+                '         </p>\n' +
+                '        </div>\n' +
+                '        <div class="blog-meta" style="margin-top:0px">\n' +
+                '         <ul>\n' +
+                '          <li>\n' +
+                '           <i class="layui-icon layui-icon-note"></i>\n' +
+                '           <a href="/article/pages?cateId='+data.cate.id+'">'+data.cate.cnName+'</a>\n' +
+                '          </li>\n' +
+                '          <li>\n' +
+                '           <i class="layui-icon layui-icon-log"></i>'+data.createDate +
+                '          </li>\n' +
+                '          <li>\n' +
+                '           <i class="layui-icon layui-extend-wiappfangwenliang"></i>浏览（<a  href="/article/'+data.id +'">'+data.views+'</a>）\n' +
+                '          </li>\n' +
+                '         </ul>\n' +
+                '         <div class="post-readmore">\n' +
+                '          <a href="/article/'+data.id +'">阅读更多</a>\n' +
+                '         </div>\n' +
+                '        </div>\n' +
+                '       </div>\n' +
+                '      </div>\n' +
+                '      <div class="post-date one">\n' +
+                '       <!--<span th:text="${item.top}== 0 ?${loopStatus.count+ articlesList.currentPage  } : \'置顶\' "></span>-->\n' +
+                '      </div>\n' +
+                '     </div>'
+			return str;
+
+        }
+
+	</script>
+
+</body>
+<!-- InstanceEnd --></html>

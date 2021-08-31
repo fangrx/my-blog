@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Created-By: IntelliJ IDEA
+Built-By: fangrx
+Build-Jdk: version 1.8.0_201
+Implementation-Title: 后台管理模块
+Implementation-Version: 2.0.3
+Implementation-Vendor-Id: com.nonelonely
+Main-Class: ${start-class}
+

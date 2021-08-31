@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+
+    <link rel="stylesheet" th:href="@{/lib/form-selects/form-selects.v4.css}"  media="all">
+    <link rel="stylesheet" type="text/css" href="/lib/editormd/css/editormd.min.css">
+</head>
+<body class="dolphin-layout-page">
+    <div class="layui-card">
+        <div class="layui-card-header dolphin-card-header">
+            <span><i class="fa fa-bars"></i> 部署管理</span>
+            <i class="layui-icon layui-icon-refresh refresh-btn"></i>
+        </div>
+        <div class="layui-card-body">
+            <div class="layui-form-item">
+                <label class="layui-form-label">上传jar包</label>
+                <div class="layui-upload-drag" id="jar">
+                    点击上传文件，或将文件拖拽到此处!</p>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-progress layui-progress-big" lay-filter="pro" lay-showPercent="true">
+                    <div class="layui-progress-bar" lay-percent="0%"></div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">重启程序</label>
+                    <div class="layui-input-inline" style="width: 350px;">
+                        <input type="text" name="path" placeholder="请输入文本"
+                               th:value="${#params.value('deployment_jiaoben_path')}" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn-sm layui-btn" lay-submit lay-filter="settings">提交</button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">备份数据库</label>
+                    <div class="layui-input-inline" style="width: 350px;">
+                        <input type="text" name="path" placeholder="请输入文本"
+                               th:value="${#params.value('savemysql_jiaoben_path')}" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn-sm layui-btn" lay-submit lay-filter="settings">提交</button>
+                </div>
+            </div>
+    </div>
+</div>
+
+<script th:replace="/common/template :: script"></script>
+    <script type="text/javascript" th:src="@{/js/plugins/jquery-2.2.4.min.js}"></script>
+    <script>
+    var formSelects;
+    layui.use(['element', 'form', 'layer', 'upload', 'formSelects'], function () {
+        var form = layui.form;
+        var element = layui.element;
+        var $ = layui.$;
+        var upload = layui.upload;
+
+        upload.render({
+             elem: '#jar' //绑定元素
+            , url: '/upload/jar' //上传接口
+            ,field: 'jar'
+            , done: function (res) {
+                if (res.code === 0) {
+                   console.log(res);
+                }
+                layer.msg(res.msg || res.message);
+            }
+            ,accept: 'file'
+            ,progress: function(n, elem){
+
+                var percent = n + '%' //获取进度百分比
+                element.progress('pro', percent); //可配合 layui 进度条元素使用
+
+                //以下系 layui 2.5.6 新增
+             //   console.log(elem); //得到当前触发的元素 DOM 对象。可通过该元素定义的属性值匹配到对应的进度条。
+            }
+            , error: function () {
+                layer.msg("上传失败！");
+            }
+        });
+
+
+        form.on('submit(settings)', function (data) {
+            var $this = $(data.elem);
+            var $data = $this.parent(".layui-inline").prev(".layui-inline").find("input.layui-input:eq(0)");
+            var name = $data.attr("name");
+            name = name === undefined ? $this.parent(".layui-inline").prev(".layui-input-inline").find("textarea").attr("name") : name;
+            name = name === undefined ? $this.parent(".layui-inline").prev(".layui-inline").find("textarea.layui-textarea:eq(0)").attr("name") : name;
+            var value = $data.val();
+            value = value === undefined ? $this.parent(".layui-inline").prev(".layui-input-inline").find("textarea").val() : value;
+            if (name==='footer_words')
+                value=editor.html();
+            $.get("/system/deployment/jiaoben",{name: name, path: value},function (json) {
+                   layer.msg(json.msg);
+            })
+            return false;
+        });
+    })
+</script>
+</body>
+</html>

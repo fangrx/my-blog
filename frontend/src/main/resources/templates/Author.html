@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="Window-target" content="_top">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<!-- InstanceBeginEditable name="doctitle" -->
+	<title>关于作者-[[${#params.value("website_logo_words")}]]</title>
+	<!-- InstanceEndEditable -->
+	<meta name="Author" th:content='${#params.value("author_name")}'>
+	<meta name="Copyright" th:content='${#params.value("author_name")}'>
+	<meta name="keywords" th:content='${#params.value("key_word")}' />
+	<meta name="description" th:content='${#params.value("website_info_title")}'/>
+
+
+	<link href="/css/loading.css" rel="stylesheet" />
+	<link href="/css/scroll-bar.css" rel="stylesheet" />
+	<link href="/lib/layui-v2.3.0/css/layui.css" rel="stylesheet" media="all" />
+	<link href="/css/common.css" rel="stylesheet" />
+	<link href="/css/suspension.css" rel="stylesheet" />
+	<link href="/css/animate.css" rel="stylesheet" />
+	<link href="/Eextend/iconfont/iconfont.css" rel="stylesheet" />
+	<script src="/Eextend/iconfont/iconfont.js"></script>
+	<script src="/js/jquery.min.js"></script>
+	<script src="/lib/layui-v2.3.0/layui.js"></script>
+	<script src="/js/wow.min.js"></script>
+
+	<link href="/css/side-bar.css" rel="stylesheet" />
+	<link href="/css/Author.css" rel="stylesheet" />
+	<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+	<!--[if lt IE 9]>
+	<script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+	<script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+</head>
+<body>
+<!--
+           ▄              ▄
+          ▌▒█           ▄▀▒▌
+          ▌▒▒▀▄        ▀▒▒▒▐
+         ▐▄▀▒▒▀▀▀▀▄▄▄▀▒▒▒▒▒▐
+       ▄▄▀▒▒▒▒▒▒▒▒▒▒▒█▒▒▄█▒▐
+     ▄▀▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒█▒▒▒▒▒▐
+    ▐▒▒▒▄▄▄▒▒▒▒▒▒▒▒▒▒▒▒▒▀▄▒▒▌
+    ▌▒▒▐▄█▀▒▒▒▒▄▀█▄▒▒▒▒▒▒▒█▒▐
+   ▐▒▒▒▒▒▒▒▒▒▒▒▌██▀▒▒▒▒▒▒▒▒▀▄▌
+   ▌▒▀▄██▄▒▒▒▒▒▒▒▒▒▒▒░░░░▒▒▒▒▌
+   ▌▀▐▄█▄█▌▄▒▀▒▒▒▒▒▒░░░░░░▒▒▒▐
+  ▐▒▀▐▀▐▀▒▒▄▄▒▄▒▒▒  typecho  ▒▌
+  ▐▒▒▒▀▀▄▄▒▒▒▄▒▒▒▒▒▒░░░░░░▒▒▒▐
+   ▌▒▒▒▒▒▒▀▀▀▒▒▒▒▒▒▒▒░░░░▒▒▒▒▌
+   ▐▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▐
+    ▀ yo-du ▒▒▒▒▒▒▒▒▒▒▒▄▒▒▒▒▌
+      ▀▄▒▒▒▒▒▒▒▒▒▒▄▄▄▀▒▒▒▒▄▀
+     ▐▀▒▀▄▄▄▄▄▄▀▀▀▒▒▒▒▒▄▄▀
+    ▐▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▀▀
+
+    --你好，世界！生活，从敲的第一行代码开始。
+-->
+
+<div th:replace="/common/fragment:: frontendHeadher"></div>
+<!--<section class="bg-overlay layui-hide">-->
+<!--<div class="overlay"></div>-->
+<!--<div class="layui-row text py-5">-->
+<!--<p class="lead">Keep on going never give up.</p>-->
+<!--<h1>-->
+<!--我为你翻山越岭，却无心看风景-->
+<!--</h1>-->
+<!--<a href="#welcome" class="layui-btn layui-btn-normal layui-btn-radius layui-btn-lg">Let's Go</a>-->
+<!--</div>-->
+<!--</section>-->
+<section class="container">
+	<!-- InstanceBeginEditable name="EditRegion1" -->
+	<div th:replace="/common/fragment :: frontendAboutNav"></div>
+	<div class="about">
+		<div class="layui-container">
+			<div class="layui-row synopsis">
+				<div class="layui-col-lg8 layui-col-lg-offset2 text-center">
+					<img class="layui-anim layui-anim-rotate" src="https://thirdqq.qlogo.cn/g?b=oidb&k=Cw5ZpeXibht9libZm50wS9OQ&s=100&t=1580548725" alt="" oncontextmenu="return false;" ondragstart="return false;" />
+					<h1 class="author-name wow lightSpeedIn">[[${#params.value("author_name")}]]</h1>
+					<p class="author-describe wow slideInLeft" th:utext='${#params.value("author_title")}'></p>
+					<p class="author-location text-center wow bounceInRight">
+						<i class="layui-icon layui-icon-location"></i>[[${#params.value("author_addr")}]]
+					</p>
+				</div>
+			</div>
+			<hr />
+			<div class="layui-row contact wow rollIn" >
+				<div class="layui-col-md4 layui-col-md-offset4">
+					<a target="_blank" title="QQ" href="javascript:void(0);"
+					   onclick="var device = layui.device();
+							if (device.ios || device.android)
+							$(this).attr('href', 'mqqwpa://im/chat?chat_type=wpa&uin='+ 1343453657 +'&version=1&src_type=web&web_src=oicqzone.com');
+							else
+							$(this).attr('href', 'http://wpa.qq.com/msgrd?v=1&uin='+ 1343453657 +'&site=qq&menu=yes');">
+						<i class="layui-icon layui-extend-QQ"></i>
+					</a>
+					<a href="javascript:void(0);" onclick="layer.msg('微信暂时不对外开放，请更换其他联系方式');return false;">
+						<i class="layui-icon layui-extend-weixin"></i>
+					</a>
+					<a target="_blank" href="javascript:void(0);" onclick="layer.msg('微博链接未进行设置');return false;">
+						<i class="layui-icon layui-extend-weibo"></i>
+					</a>
+					<a target="_blank" href="javascript:void(0);" onclick="layer.msg('Github链接未进行设置');return false;">
+						<i class="layui-icon layui-extend-GitHub"></i>
+					</a>
+					<a href="mailto:1343453657@qq.com">
+						<i class="layui-icon layui-extend-mail"></i>
+					</a>
+				</div>
+			</div>
+			<div class="introduce">
+				<fieldset class="layui-elem-field layui-field-title wow zoomIn">
+					<legend class="text-center">简介</legend>
+					<div class="layui-field-box" th:utext='${#params.value("author_info")}'>
+
+					</div>
+				</fieldset>
+			</div>
+			<div class="skill-box wow slideInUp">
+				<fieldset class="layui-elem-field layui-field-title">
+					<legend class="text-center">技能</legend>
+					<div class="layui-field-box">
+						<div class="layui-row layui-col-space30">
+							<div class="layui-col-md4 layui-col-sm6 layui-col-xs12 progress" th:each="item:${lists}">
+								<p>[[${item.title}]]</p>
+								<div class="layui-progress" lay-showPercent="true">
+									<div class="layui-progress-bar layui-bg-blue" th:class="${item.remark}" th:lay-percent="${item.percent}"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+		</div>
+	</div>
+
+	<script src="/js/side-bar.js"></script>
+	<script>
+        function iniParam() { }
+	</script>
+
+	<!-- InstanceEndEditable -->
+</section>
+<div th:replace="/common/fragment :: frontendFooter"></div>
+<div th:replace="/common/fragment :: frontendLongin"></div>
+<!-- 打字机特效js-->
+<script src="/js/typewriter-special-effects.js"></script>
+<script src="/js/Template.js"></script>
+<!-- 这个JS展示公告层用的，无关紧要可以删掉 -->
+<script src="js/TempShowTip.js"></script>
+</body>
+<!-- InstanceEnd --></html>

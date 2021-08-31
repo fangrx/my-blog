@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Window-target" content="_top">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- InstanceBeginEditable name="doctitle" -->
+    <title>学无止境-[[${#params.value("website_logo_words")}]]</title>
+    <!-- InstanceEndEditable -->
+	<meta name="Author" th:content='${#params.value("author_name")}'>
+	<meta name="Copyright" th:content='${#params.value("author_name")}'>
+	<meta name="keywords" th:content='${#params.value("key_word")}' />
+	<meta name="description" th:content='${#params.value("website_info_title")}'/>
+
+	<!--<link rel="stylesheet" th:href="@{/ css/loading.css}">-->
+	<!--<link rel="stylesheet" th:href="@{/css/scroll-bar.css}">-->
+	<!--<link rel="stylesheet" th:href="@{/lib/layui-v2.3.0/css/layui.css}">-->
+	<!--<link rel="stylesheet" th:href="@{/css/common.css}">-->
+	<!--<link rel="stylesheet" th:href="@{/css/suspension.css}">-->
+	<!--<link rel="stylesheet" th:href="@{/css/animate.css}">-->
+	<!--<link rel="stylesheet" th:href="@{/Eextend/iconfont/iconfont.css}">-->
+
+	<link rel="stylesheet" th:each='item:${#strings.arraySplit(#params.value("common_css"),",")}' th:href="${item}">
+	<link rel="stylesheet" th:each='item:${#strings.arraySplit(#params.value("article_css"),",")}' th:href="${item}">
+
+	<script type="text/javascript" th:each='item:${#strings.arraySplit(#params.value("common_js"),",")}' th:src="${item}"></script>
+
+	<!--<script type="text/javascript" th:src="@{/Eextend/iconfont/iconfont.js}"></script>-->
+	<!--<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>-->
+	<!--<script type="text/javascript" th:src="@{/lib/layui-v2.3.0/layui.js}"></script>-->
+	<!--<script type="text/javascript" th:src="@{/js/wow.min.js}"></script>-->
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <!--<script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>-->
+      <!--<script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>-->
+    <![endif]-->
+</head>
+<body>
+
+	<div th:replace="/common/fragment :: frontendHeadher"></div>
+    <section class="container">
+		<!-- InstanceBeginEditable name="EditRegion1" -->
+		<div class="layui-container">
+			<div class="layui-row layui-col-space20">
+				<div class="layui-col-md9 layui-col-sm12 layui-col-xs12 post-area">
+
+					<div class="single-post" th:each="item,loopStatus:${articlesList.pageArticle}">
+						<div class="inner-post">
+							<div class="post-img">
+								<a th:href="'/article/'+${item.id }">
+									<img th:if="${item.cover !=null && item.cover != ''}" th:src="${item.cover }" >
+									<img th:if="${item.cover ==null || item.cover == ''}" src="/images/test.jpg" >
+								</a>
+							</div>
+							<div class="post-info">
+								<div class="post-title">
+									<h3>
+										<a  th:href="'/article/'+${item.id }">[[${item.title}]]</a>
+									</h3>
+								</div>
+								<div class="post-content">
+									<p>
+										[[${item.summary}]]
+									</p>
+								</div>
+								<div class="blog-meta">
+									<ul>
+										<li>
+											<i class="layui-icon layui-icon-note"></i>
+											<a th:href="'/article/pages?cateId='+${item.cate.id}">[[${item.cate.cnName}]]</a>
+										</li>
+										<li>
+											<i class="layui-icon layui-icon-log"></i>[[${item.createDate}]]
+										</li>
+										<li>
+											<i class="layui-icon layui-extend-wiappfangwenliang"></i>浏览（<a  th:href="'/article/'+${item.id }">[[${item.views}]]</a>）
+										</li>
+									</ul>
+									<div class="post-readmore">
+										<a th:href="'/article/'+${item.id }">阅读更多</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="post-date one">
+							<span th:text="${item.top}== 0 ?${loopStatus.count+ articlesList.currentPage  } : '置顶' "></span>
+						</div>
+					</div>
+					<div th:utext="${articlesList.layPage}"></div>
+					<!--<div id="page" class="wow rotateInDownLeft"></div>-->
+				</div>
+
+				<div class="layui-col-md3 layui-col-sm12 layui-col-xs12">
+				  	<div class="card search wow flipInY" data-wow-delay="0.5s">
+						<i class="layui-icon layui-icon-search" onclick="window.open('http://zhannei.baidu.com/cse/search?s=6583887351044514798&entry=1&q='+document.getElementById('keyWord').value)" ></i>
+						<input id="keyWord" type="text" autocomplete="off" placeholder="Search..." class="layui-input">
+            		</div>
+					<div class="card lmNav">
+						<h2 class="side-title">栏目分类</h2>
+						<ul>
+							<li th:each="item:${cateList}">
+								<a  th:href="'/article/pages?cateId='+${item.id}">
+									<div class="layui-row">
+										<div class="layui-col-xs10 layui-elip">[[${item.cnName}]]</div>
+										<div class="layui-col-xs2"><span class="layui-badge-rim">[[${item.name}]]</span></div>
+									</div>
+								</a>
+							</li>
+						</ul>
+					</div>
+
+					<div class="card paihang">
+						<h2 class="side-title">热门文章</h2>
+						<ul>
+							<li th:each="item,loopStatus:${lots}">
+								<span th:if="${loopStatus.count<4}" class="layui-badge">[[${loopStatus.count  }]]</span>
+								<span th:if="${loopStatus.count>3}" class="layui-badge layui-bg-gray">[[${loopStatus.count  }]]</span>
+								<a  th:href="'/article/'+${item.id }">
+									[[${item.title}]]
+								</a>
+							</li>
+						</ul>
+					</div>
+
+					<div class="card suiji">
+						<h2 class="side-title">猜你喜欢</h2>
+						<ul>
+							<li th:each="item:${randomArticles}">
+								<a th:href="'/article/'+${item.id }">
+									[[${item.title}]]
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<script type="text/javascript" th:src="@{/js/Article.js}"></script>
+
+
+		<!-- InstanceEndEditable -->
+    </section>
+	<div th:replace="/common/fragment :: frontendFooter"></div>
+	<div th:replace="/common/fragment :: frontendLongin"></div>
+	<!-- 打字机特效js-->
+	<script type="text/javascript" th:src="@{/js/typewriter-special-effects.js}"></script>
+	<script type="text/javascript" th:src="@{/js/Template.js}"></script>
+
+</body>
+<!-- InstanceEnd --></html>

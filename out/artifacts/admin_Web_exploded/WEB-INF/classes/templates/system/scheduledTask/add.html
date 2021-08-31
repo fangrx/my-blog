@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+</head>
+<body>
+    <div class="layui-form dolphin-compile">
+    <form th:action="@{/system/scheduledTask/save}">
+        <input type="hidden" name="id" th:if="${scheduledTask}" th:value="${scheduledTask.id}">
+        <div class="layui-form-item">
+            <label class="layui-form-label">bean名称</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="taskKey" placeholder="请输入任务key值（使用bean名称）" th:value="${scheduledTask?.taskKey}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">任务描述</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="taskDesc" placeholder="请输入'任务描述" th:value="${scheduledTask?.taskDesc}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">任务表达式</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="taskCron" id="taskCron" placeholder="请输入任务表达式"  autocomplete="off" th:value="${scheduledTask?.taskCron}">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-col-sm6">
+            <label class="layui-form-label">程序是否初始化启动</label>
+            <div class="layui-input-block">
+                <select name="initStartFlag" lay-verify="required" lay-search>
+                    <option value="">请选择</option>
+                    <option value="1"
+                            th:selected="${1 == scheduledTask?.initStartFlag}">是</option>
+                    <option value="0"
+                            th:selected="${0 == scheduledTask?.initStartFlag}">否</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item dolphin-finally">
+            <button class="layui-btn ajax-submit"><i class="fa fa-check-circle"></i> 保存</button>
+            <button class="layui-btn btn-secondary close-popup"><i class="fa fa-times-circle"></i> 关闭</button>
+        </div>
+    </form>
+</div>
+<script th:replace="/common/template :: script"></script>
+    <script>
+        layui.use(['element','cron'], function () {
+             var $ = layui.$,
+            cron = layui.cron;
+            cron.render({
+                elem: "#taskCron", // 绑定元素
+                url:
+                    "/system/scheduledTask/getNextExecTime?numTimes=10", // 获取最近运行时间的接口
+                value: $("#taskCron").val(), // 默认值
+                done: function (cronStr) {
+                    console.log(cronStr);
+                    $("#taskCron").val(cronStr);
+                },
+            });
+        })
+    </script>
+
+</body>
+</html>

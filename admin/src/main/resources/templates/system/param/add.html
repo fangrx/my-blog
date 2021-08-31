@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+</head>
+<body>
+    <div class="layui-form dolphin-compile">
+    <form th:action="@{/system/param/save}">
+        <input type="hidden" name="id" th:if="${param2}" th:value="${param2.id}">
+        <div class="layui-form-item">
+            <label class="layui-form-label">参数名称</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="name" placeholder="请输入参数名称" th:value="${param2?.name}">
+            </div>
+        </div>
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">参数值</label>-->
+<!--            <div class="layui-input-inline">-->
+<!--                <input class="layui-input" type="text" name="value" placeholder="请输入参数值" th:value="${param?.value}">-->
+<!--            </div>-->
+<!--        </div>-->
+        <div class="layui-form-item">
+            <label class="layui-form-label required">父级菜单</label>
+            <div class="layui-input-inline">
+                <input class="layui-input select-tree" th:attr="data-url=@{/system/param/listTree}, data-value=${pMenu?.id}" type="text" name="pid"  placeholder="请输入父级菜单" th:value="${pMenu?.name}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">内容类型</label>
+            <div class="layui-input-block">
+                <input type="radio" name="dataType" value="string" title="字符串"
+                       th:checked="${!#strings.isEmpty(param2?.dataType) && param2?.dataType eq 'string' }"
+                       lay-filter="editor">
+                <input type="radio" name="dataType" value="html" title="富文本"
+                       th:checked="${#strings.isEmpty(param2?.dataType) || param2?.dataType eq'html' }"
+                       lay-filter="editor">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">参数值</label>
+            <div class="layui-input-block" style="margin-right: 20px;">
+                <textarea id="content" name="value"  class="layui-textarea" th:text="${param2?.value}"></textarea>
+            </div>
+            <div>
+
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入内容" class="layui-textarea" name="remark">[[${param2?.remark}]]</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item dolphin-finally">
+            <button class="layui-btn ajax-submit"><i class="fa fa-check-circle"></i> 保存</button>
+            <button class="layui-btn btn-secondary close-popup"><i class="fa fa-times-circle"></i> 关闭</button>
+        </div>
+    </form>
+</div>
+<script th:replace="/common/template :: script"></script>
+    <script type="text/javascript" th:src="@{/js/plugins/jquery-2.2.4.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/zTree_v3/js/jquery.ztree.core.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dolphinTree.js}"></script>
+    <script src="/Eextend/ace/ace.js"></script>
+    <script src="/Eextend/ace/ext-language_tools.js"></script>
+
+
+
+    <script th:inline="javascript" >
+        var type = [[${param2?.dataType}]];
+        layui.use(['form'], function () {
+            window.form = layui.form;
+
+            // 初始化排序下拉选项
+            var pid = $(".select-tree").data('value');
+            if (pid !== undefined){
+                sortRender({id: pid});
+            }
+            if (type!= '1'){
+                $("#resources").show();
+            } else {
+                $("#resources").hide();
+            }
+            form.on('select(type)', function(data){
+
+                if (data.value != '1'){
+                    $("#resources").show();
+                } else {
+                    $("#resources").hide();
+                }
+            })
+            var editor ;
+          if('html' == $('input:radio:checked').val())   {
+            editor =  createKindEditor();
+           }
+
+
+            form.on('radio(editor)', function (data) {
+                if (data.value === "string") {
+                    if (editor)
+                    editor.remove();
+                }
+                else if (data.value === "html") {
+                    editor =  createKindEditor();
+                }
+            });
+
+
+
+        });
+
+        // 初始化下拉树
+        $.fn.selectTree({
+            rootTree: '顶级菜单',
+            // 选中后事件
+            onSelected: sortRender
+        });
+
+        // 更新渲染排序下拉选项
+        function sortRender(treeNode) {
+            var pid = treeNode.id;
+            var sort = $(".select-sort");
+            var id = sort.data('id') ? sort.data('id') : 0;
+            var url = sort.data('url') + "/" + pid + "/" + id;
+            $.get(url, function (result) {
+                var options = '';
+                var sortNum = Object.keys(result).length;
+                if(pid === $(".select-tree").data('value') && sort.data('sort')){
+                    sortNum = sort.data('sort') - 1;
+                }
+                result[0] = "首位";
+                for(var key in result){
+                    var selected = sortNum == key ? "selected=''" : "";
+                    options += "<option value='"+ key +"' " + selected + ">"+ result[key] +"</option>";
+                }
+                sort.html(options);
+                form.render('select');
+            });
+        }
+
+        // 监听变动图标
+        $(".icon-input").on("input propertychange", function(){
+            $(".icon-show").attr("class", "icon-show "+$(this).val());
+        });
+
+        // 同步操作权限输入框
+        var $perms = $(".perms-input").val();
+        $(".url-input").on("input propertychange", function(){
+            if($perms === ''){
+                $(".perms-refresh").click();
+            }
+        });
+
+        // 更新权限标识
+        $(".perms-refresh").on("click", function (e) {
+            e.preventDefault();
+            var $perms = $(".perms-input");
+            var url = $(".url-input").val().substr(1);
+            var perms = url.replace(new RegExp( '/' , "g" ), ':');
+            $perms.val(perms);
+        });
+    </script>
+</body>
+</html>
