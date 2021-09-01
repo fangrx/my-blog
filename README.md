@@ -29,7 +29,6 @@ Eclipse：Import -> Exising Mavne Project
 # 全新的项目结构
 
 ![项目结构图](https://images.gitee.com/uploads/images/2020/0225/132322_7c0689b9_1165306.png)
-
 # 博客预览
 
 ## PC效果
